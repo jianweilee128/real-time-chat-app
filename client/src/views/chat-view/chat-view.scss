@@ -1,0 +1,44 @@
+.chat-view-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+
+  h1 {
+    margin: 0;
+  }
+
+  .left-view-container {
+    width: 20%;
+    border: 1px solid black;
+  }
+
+  .right-view-container {
+    width: 80%;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+
+    .right-nav-view {
+      height: 5%;
+      border: 1px solid black;
+    }
+
+    .right-body-view {
+      height: 95%;
+      border: 1px solid black;
+      display: flex;
+      flex-direction: row;
+
+      .chatroom-view {
+        width: 80%;
+        border: 1px solid black;
+      }
+
+      .user-list-view {
+        width: 20%;
+        border: 1px solid black;
+      }
+    }
+  }
+}
