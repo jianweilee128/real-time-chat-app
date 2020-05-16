@@ -1,0 +1,15 @@
+.message-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+
+  .message-info {
+    margin: 0.5rem 0;
+
+    span {
+      padding: 0 1rem;
+      color: grey;
+      font-size: 1rem;
+    }
+  }
+}

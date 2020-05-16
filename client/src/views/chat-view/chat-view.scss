@@ -10,7 +10,6 @@
 
   .left-view-container {
     width: 20%;
-    border: 1px solid black;
   }
 
   .right-view-container {
@@ -26,13 +25,11 @@
 
     .right-body-view {
       height: 95%;
-      border: 1px solid black;
       display: flex;
       flex-direction: row;
 
       .chatroom-view {
         width: 80%;
-        border: 1px solid black;
       }
 
       .user-list-view {
