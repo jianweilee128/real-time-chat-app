@@ -4,10 +4,13 @@ const userController = require("../controllers/userController");
 
 const router = express.Router();
 
+// Auth routes
 router.post("/signup", authController.signup);
 router.post("/signin", authController.signin);
-router.get("/logout", authController.isLoggedIn, authController.logout);
+router.get("/logout", authController.logout);
 
+// User routes
+router.get("/me", authController.protect, userController.getCurrentUser);
 router.route("/").get(userController.getAllUsers);
 
 module.exports = router;

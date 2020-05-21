@@ -27,9 +27,7 @@ const createAndSendToken = (user, statusCode, res) => {
   res.status(statusCode).json({
     status: "success",
     token,
-    data: {
-      user,
-    },
+    user,
   });
 };
 
@@ -53,7 +51,6 @@ exports.signin = catchAsync(async (req, res, next) => {
   }
   // 2) Find user in db
   const user = await User.findOne({ email }).select("+password");
-
   if (!user || !(await user.checkCorrectPassword(password, user.password))) {
     return next(new AppError("Incorrect email or password", 401));
   }
@@ -61,7 +58,7 @@ exports.signin = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, res);
 });
 
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
+exports.protect = catchAsync(async (req, res, next) => {
   let token;
   // 1) Getting token and check if its there
   if (
@@ -88,6 +85,7 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
     );
   }
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 

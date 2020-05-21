@@ -3,11 +3,10 @@ const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
+const messageRouter = require("./routes/messageRoutes");
 const ErrorHandler = require("./controllers/errorController");
 const connectDB = require("./connectDB");
 const AppError = require("./utils/appError");
-// const server = require("http").createServer(app);
-// const io = require("socket.io")(server);
 
 connectDB();
 const app = express();
@@ -45,6 +44,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/messages", messageRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
@@ -52,16 +52,35 @@ app.all("*", (req, res, next) => {
 
 app.use(ErrorHandler);
 
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+
 // Connect server to listen to port specified
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}...`);
 });
 
-// // Socket.io connection to listen to message
-// io.on("connection", (socket) => {
-//   console.log("We have a new connection!");
+const messageController = require("./controllers/messageController");
+const Message = require("./models/messageModel");
 
-//   socket.on("disconnect", () => {
-//     console.log("User has left");
-//   });
-// });
+// Socket.io connection to listen to message
+io.on("connection", (socket) => {
+  console.log("We have a new connection!");
+
+  // Welcome current user
+  socket.emit("message", "Welcome to the conversation!");
+
+  socket.on("input-message-emit", async (message, sender, createdAt) => {
+    const newMessage = await messageController.createMessage(
+      message,
+      sender,
+      createdAt
+    );
+    const doc = await Message.findById(newMessage._id);
+    return io.emit("input-message-receive", doc);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User has left");
+  });
+});
