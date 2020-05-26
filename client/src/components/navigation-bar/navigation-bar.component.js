@@ -4,7 +4,7 @@ import "./navigation-bar.scss";
 import { logout } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
 
-const NavigationBar = ({ name, history, logout }) => {
+const NavigationBar = ({ name, history, logout, currentRoom }) => {
   function handleLogout() {
     logout();
     return history.push({
@@ -14,6 +14,7 @@ const NavigationBar = ({ name, history, logout }) => {
   return (
     <div className="navigation-bar-container">
       <h4>{name}</h4>
+      <h4>{currentRoom}</h4>
       <div className="logout-button" onClick={() => handleLogout()}>
         Logout
       </div>
@@ -25,4 +26,12 @@ const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(logout()),
 });
 
-export default withRouter(connect(null, mapDispatchToProps)(NavigationBar));
+const mapStateToProps = (state) => {
+  return {
+    currentRoom: state.room.currentRoom,
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(NavigationBar)
+);

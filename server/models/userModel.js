@@ -41,6 +41,11 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.pre(/^find/, function (next) {
+  this.select("-__v");
+  next();
+});
+
 userSchema.methods.checkCorrectPassword = async function (
   inputPassword,
   userPassword

@@ -10,7 +10,7 @@ const LoginForm = ({ history, login }) => {
 
   function handleLogin() {
     login(email, password).payload.then((data) => {
-      if (data.status === "success") {
+      if (data && data.status === "success") {
         return history.push({
           pathname: `/chat/${data.user._id}`,
           state: { user: data.user },

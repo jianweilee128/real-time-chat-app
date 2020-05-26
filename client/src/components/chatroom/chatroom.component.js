@@ -3,6 +3,7 @@ import "./chatroom.scss";
 import {
   inputMessageEmit,
   inputMessageReceive,
+  joinRoom,
 } from "../../utils/socketFunctions";
 import ChatCard from "../chat-card/chat-card.component";
 import {
@@ -12,8 +13,10 @@ import {
 } from "../../redux/message/message.actions";
 import { connect } from "react-redux";
 
-const handleInputSubmit = (message, id) => {
-  inputMessageEmit(message, id);
+const handleInputSubmit = (event, message, id, room) => {
+  event.preventDefault();
+
+  inputMessageEmit(message, id, room);
   clearTextInputFields();
 };
 
@@ -21,18 +24,31 @@ const clearTextInputFields = () => {
   document.getElementById("chatroom-text-input").value = "";
 };
 
-const Chatroom = ({ id, messageList, addMessageList, setMessageList }) => {
+const Chatroom = ({
+  id,
+  messageList,
+  addMessageList,
+  setMessageList,
+  currentRoom,
+}) => {
   const [message, setMessage] = useState("");
   useEffect(() => {
-    getMessageList().payload.then((res) => setMessageList(res.messages));
+    getMessageList(currentRoom).payload.then((res) =>
+      setMessageList(res.messages)
+    );
+  }, [currentRoom, setMessageList]);
+
+  useEffect(() => {
+    joinRoom(currentRoom);
     inputMessageReceive(messageList, addMessageList);
-  }, []);
+  }, []); // eslint-disable-line
+
   return (
     <div className="chatroom-container">
       <div className="chatroom-screen">
         {messageList.map((data) => (
           <ChatCard
-            key={`${data.sender._id}${data._id}`}
+            key={data._id}
             sender={data.sender.name}
             text={data.message}
             createdAt={data.createdAt}
@@ -46,11 +62,13 @@ const Chatroom = ({ id, messageList, addMessageList, setMessageList }) => {
           id="chatroom-text-input"
           name="chatroom-text-input"
           placeholder="Write your message..."
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(event) => setMessage(event.target.value)}
         />
         <button
           className="submit-button"
-          onClick={() => handleInputSubmit(message, id)}
+          onClick={(event) =>
+            handleInputSubmit(event, message, id, currentRoom)
+          }
         >
           Submit
         </button>
@@ -60,7 +78,7 @@ const Chatroom = ({ id, messageList, addMessageList, setMessageList }) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getMessageList: () => dispatch(getMessageList()),
+  getMessageList: (room) => dispatch(getMessageList(room)),
   addMessageList: (messageItem) => dispatch(addMessageList(messageItem)),
   setMessageList: (messageList) => dispatch(setMessageList(messageList)),
 });
@@ -68,6 +86,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
   return {
     messageList: state.message.messageList,
+    currentRoom: state.room.currentRoom,
   };
 };
 

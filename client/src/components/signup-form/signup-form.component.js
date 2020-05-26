@@ -12,7 +12,7 @@ const SignupForm = ({ history, signup }) => {
 
   function handleSignup() {
     signup(name, email, password, passwordConfirm).payload.then((data) => {
-      if (data.status === "success") {
+      if (data && data.status === "success") {
         return history.push({
           pathname: `/chat/${data.user._id}`,
           state: { user: data.user },

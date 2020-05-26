@@ -6,10 +6,13 @@ export const addMessageList = (messageItem) => ({
   payload: messageItem,
 });
 
-export const getMessageList = () => {
+export const getMessageList = (room) => {
   const request = axios({
-    method: "get",
+    method: "post",
     url: "/api/v1/messages",
+    data: {
+      room: room,
+    },
   })
     .then((res) => res.data)
     .catch(() => console.log("Error in getting messages!"));

@@ -67,17 +67,27 @@ const Message = require("./models/messageModel");
 io.on("connection", (socket) => {
   console.log("We have a new connection!");
 
-  // Welcome current user
-  socket.emit("message", "Welcome to the conversation!");
+  // Join room
+  socket.on("join-room", (room) => {
+    socket.join(room);
+  });
 
-  socket.on("input-message-emit", async (message, sender, createdAt) => {
+  // Leave room
+  socket.on("leave-room", (room) => {
+    socket.leave(room);
+  });
+
+  // Receive message from client to server
+  socket.on("input-message-emit", async (message, sender, createdAt, room) => {
     const newMessage = await messageController.createMessage(
       message,
       sender,
-      createdAt
+      createdAt,
+      room
     );
-    const doc = await Message.findById(newMessage._id);
-    return io.emit("input-message-receive", doc);
+    const res = await Message.findById(newMessage._id);
+    // Return message from server to client and to specific room
+    return io.to(res.room).emit("input-message-receive", res);
   });
 
   socket.on("disconnect", () => {
