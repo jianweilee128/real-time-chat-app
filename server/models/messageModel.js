@@ -14,7 +14,8 @@ const messageSchema = new mongoose.Schema({
     type: Date,
   },
   room: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
+    ref: "Room",
     required: [true, "Message must come from a specific room"],
   },
 });
@@ -23,6 +24,13 @@ messageSchema.pre(/^find/, function (next) {
   this.populate({
     path: "sender",
     select: "-_id -email",
+  });
+  next();
+});
+messageSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "room",
+    select: "-users",
   });
   next();
 });

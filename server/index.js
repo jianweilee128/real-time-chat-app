@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
 const messageRouter = require("./routes/messageRoutes");
+const roomRouter = require("./routes/roomRoutes");
 const ErrorHandler = require("./controllers/errorController");
 const connectDB = require("./connectDB");
 const AppError = require("./utils/appError");
@@ -45,6 +46,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/messages", messageRouter);
+app.use("/api/v1/rooms", roomRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
@@ -61,6 +63,8 @@ server.listen(PORT, () => {
 });
 
 const messageController = require("./controllers/messageController");
+const roomController = require("./controllers/roomController");
+const Room = require("./models/roomModel");
 const Message = require("./models/messageModel");
 
 // Socket.io connection to listen to message
@@ -87,7 +91,18 @@ io.on("connection", (socket) => {
     );
     const res = await Message.findById(newMessage._id);
     // Return message from server to client and to specific room
-    return io.to(res.room).emit("input-message-receive", res);
+    return io.to(res.room._id).emit("input-message-receive", res);
+  });
+
+  socket.on("room-create", async (name, user) => {
+    const newRoom = await roomController.createRoom(name, user);
+
+    const res = await Room.find();
+    return io.emit("room-create-success", res);
+  });
+
+  socket.on("room-delete", async (id) => {
+    await roomController.deleteRoom(id);
   });
 
   socket.on("disconnect", () => {

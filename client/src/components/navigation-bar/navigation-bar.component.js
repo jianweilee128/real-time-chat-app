@@ -14,7 +14,7 @@ const NavigationBar = ({ name, history, logout, currentRoom }) => {
   return (
     <div className="navigation-bar-container">
       <h4>{name}</h4>
-      <h4>{currentRoom}</h4>
+      <h4>{currentRoom[0]}</h4>
       <div className="logout-button" onClick={() => handleLogout()}>
         Logout
       </div>

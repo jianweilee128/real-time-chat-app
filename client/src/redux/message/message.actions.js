@@ -1,11 +1,6 @@
 import MessageActionTypes from "./message.types";
 import axios from "axios";
 
-export const addMessageList = (messageItem) => ({
-  type: MessageActionTypes.ADD_MESSAGE_LIST,
-  payload: messageItem,
-});
-
 export const getMessageList = (room) => {
   const request = axios({
     method: "post",
@@ -22,6 +17,11 @@ export const getMessageList = (room) => {
     payload: request,
   };
 };
+
+export const addMessageList = (messageItem) => ({
+  type: MessageActionTypes.ADD_MESSAGE_LIST,
+  payload: messageItem,
+});
 
 export const setMessageList = (messageList) => {
   return {

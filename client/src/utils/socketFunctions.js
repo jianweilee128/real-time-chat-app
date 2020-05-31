@@ -13,11 +13,26 @@ export const inputMessageEmit = (message, id, room) => {
 };
 
 export const inputMessageReceive = (messageList, setMessageList) => {
-  socket.on("input-message-receive", (doc) => {
-    setMessageList(messageList.concat(doc));
+  socket.on("input-message-receive", (res) => {
+    setMessageList(messageList.concat(res));
   });
 };
 
+export const createRoom = (name, user) => {
+  socket.emit("room-create", {
+    name: name,
+    user: user,
+  });
+};
+export const deleteRoomSocket = (id) => {
+  socket.emit("room-delete", id);
+};
+
+export const createRoomSuccess = (setRoomList) => {
+  socket.on("room-create-success", (res) => {
+    setRoomList(res);
+  });
+};
 export const joinRoom = (room) => {
   socket.emit("join-room", room);
 };

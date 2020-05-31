@@ -3,4 +3,11 @@
   box-sizing: border-box;
   cursor: pointer;
   text-transform: uppercase;
+  display: flex;
+  padding: 10px 20px;
+
+  .chatroom-card-options {
+    margin-left: auto;
+    margin-right: 0;
+  }
 }

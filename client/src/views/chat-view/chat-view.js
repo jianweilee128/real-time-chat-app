@@ -3,7 +3,6 @@ import "./chat-view.scss";
 import ChatroomList from "../../components/chatroom-list/chatroom-list.component";
 import NavigationBar from "../../components/navigation-bar/navigation-bar.component";
 import Chatroom from "../../components/chatroom/chatroom.component";
-import UsersList from "../../components/users-list/users-list.component";
 
 class ChatView extends React.Component {
   render() {
@@ -11,7 +10,7 @@ class ChatView extends React.Component {
     return (
       <div className="chat-view-container">
         <div className="left-view-container">
-          <ChatroomList name={name} id={_id} />
+          <ChatroomList id={_id} />
         </div>
         <div className="right-view-container">
           <div className="right-nav-view">
@@ -20,9 +19,6 @@ class ChatView extends React.Component {
           <div className="right-body-view">
             <div className="chatroom-view">
               <Chatroom id={_id} />
-            </div>
-            <div className="user-list-view">
-              <UsersList />
             </div>
           </div>
         </div>

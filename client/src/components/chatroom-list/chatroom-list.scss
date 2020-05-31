@@ -2,20 +2,10 @@
   display: flex;
   flex-direction: column;
   height: 85%;
+  margin: 0 1rem;
 
   h1 {
     padding: 20px;
-  }
-
-  .search-box {
-    opacity: 0.7;
-    padding: 20px;
-    box-sizing: border-box;
-    border: none;
-    border-bottom: 1px solid #707070;
-    color: black;
-    outline: none;
-    font-size: 1rem;
   }
 }
 
@@ -50,6 +40,7 @@
     cursor: pointer;
     display: flex;
     justify-content: center;
+    align-items: center;
 
     background-color: black;
     color: white;

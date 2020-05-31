@@ -1,0 +1,39 @@
+.chatroom-list-menu-container {
+  display: flex;
+  flex-direction: row;
+
+  .chatroom-list-menu {
+    padding: 0.5rem;
+    width: 33%;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    background: black;
+    color: white;
+    font-family: "Source Sans Pro";
+    border: none;
+    font-size: 0.8rem;
+    font-weight: bolder;
+    display: inline-block;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .chatroom-dropdown-container {
+    position: absolute;
+    min-width: 80px;
+    border: 1px solid black;
+    background-color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 5;
+    margin: 2rem 0;
+    padding: 0.5rem;
+
+    li {
+      color: black;
+      list-style-type: none;
+    }
+  }
+}

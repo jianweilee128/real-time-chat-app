@@ -3,7 +3,6 @@ import "./chatroom.scss";
 import {
   inputMessageEmit,
   inputMessageReceive,
-  joinRoom,
 } from "../../utils/socketFunctions";
 import ChatCard from "../chat-card/chat-card.component";
 import {
@@ -15,12 +14,7 @@ import { connect } from "react-redux";
 
 const handleInputSubmit = (event, message, id, room) => {
   event.preventDefault();
-
   inputMessageEmit(message, id, room);
-  clearTextInputFields();
-};
-
-const clearTextInputFields = () => {
   document.getElementById("chatroom-text-input").value = "";
 };
 
@@ -33,13 +27,12 @@ const Chatroom = ({
 }) => {
   const [message, setMessage] = useState("");
   useEffect(() => {
-    getMessageList(currentRoom).payload.then((res) =>
-      setMessageList(res.messages)
-    );
+    getMessageList(currentRoom[1]).payload.then((res) => {
+      setMessageList(res.messages);
+    });
   }, [currentRoom, setMessageList]);
 
   useEffect(() => {
-    joinRoom(currentRoom);
     inputMessageReceive(messageList, addMessageList);
   }, []); // eslint-disable-line
 
@@ -62,13 +55,11 @@ const Chatroom = ({
           id="chatroom-text-input"
           name="chatroom-text-input"
           placeholder="Write your message..."
-          onChange={(event) => setMessage(event.target.value)}
+          onChange={(e) => setMessage(e.target.value)}
         />
         <button
           className="submit-button"
-          onClick={(event) =>
-            handleInputSubmit(event, message, id, currentRoom)
-          }
+          onClick={(e) => handleInputSubmit(e, message, id, currentRoom[1])}
         >
           Submit
         </button>
