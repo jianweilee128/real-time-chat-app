@@ -53,3 +53,25 @@ export const logout = () => {
     payload: request,
   };
 };
+
+// User Requests
+export const getOnlineUsers = () => {
+  const request = axios({
+    method: "get",
+    url: "/api/v1/users/online",
+  })
+    .then((res) => res.data)
+    .catch(() => alert("Error in getting users! Please try again..."));
+
+  return {
+    type: UserActionTypes.GET_ONLINE_USER,
+    payload: request,
+  };
+};
+
+export const setUserList = (userList) => {
+  return {
+    type: UserActionTypes.SET_USER_LIST,
+    payload: userList,
+  };
+};

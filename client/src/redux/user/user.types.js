@@ -2,6 +2,8 @@ const UserActionTypes = {
   LOGIN_USER: "LOGIN_USER",
   SIGNUP_USER: "SIGNUP_USER",
   LOGOUT_USER: "LOGOUT_USER",
+  GET_ONLINE_USER: "GET_ONLINE_USER",
+  SET_USER_LIST: "SET_USER_LIST",
 };
 
 export default UserActionTypes;

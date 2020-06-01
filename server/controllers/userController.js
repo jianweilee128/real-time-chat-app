@@ -23,3 +23,14 @@ exports.getCurrentUser = catchAsync(async (req, res, next) => {
     currentUser,
   });
 });
+
+exports.getOnlineUsers = catchAsync(async (req, res, next) => {
+  const users = await User.find({ online: true }).select(
+    "+name -email -online"
+  );
+
+  res.status(200).json({
+    status: "success",
+    users,
+  });
+});

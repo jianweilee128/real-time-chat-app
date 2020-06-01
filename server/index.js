@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/userRoutes");
 const messageRouter = require("./routes/messageRoutes");
 const roomRouter = require("./routes/roomRoutes");
@@ -19,6 +20,7 @@ app.use(cors());
 // Body parser,reading data from body into req.body
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Development logging
 if (process.env.NODE_ENV === "development") {
@@ -95,7 +97,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("room-create", async (name, user) => {
-    const newRoom = await roomController.createRoom(name, user);
+    await roomController.createRoom(name, user);
 
     const res = await Room.find();
     return io.emit("room-create-success", res);
