@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./chatroom-card.scss";
 import {
   setCurrentRoom,
@@ -10,6 +10,7 @@ import {
   leaveRoom,
   deleteRoomSocket,
 } from "../../utils/socketFunctions";
+import ListenOutsideClick from "../../utils/listenOutsideClick";
 
 import { connect } from "react-redux";
 
@@ -22,6 +23,14 @@ const ChatroomCard = ({
   deleteRoom,
   toggleDelete,
 }) => {
+  const ref = useRef();
+  ListenOutsideClick(ref, () => {
+    console.log("test");
+    if (toggleDelete === true) {
+      setToggleDelete();
+    }
+  });
+
   return (
     <div className="chatroom-card-container">
       <span
@@ -36,6 +45,7 @@ const ChatroomCard = ({
       </span>
       {toggleDelete ? (
         <span
+          ref={ref}
           className="chatroom-card-options"
           onClick={() => {
             deleteRoom(id);
