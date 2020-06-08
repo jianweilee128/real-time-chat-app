@@ -1,6 +1,5 @@
 import React from "react";
 import "./chat-view.scss";
-import ChatroomList from "../../components/chatroom-list/chatroom-list.component";
 import NavigationBar from "../../components/navigation-bar/navigation-bar.component";
 import Chatroom from "../../components/chatroom/chatroom.component";
 
@@ -10,17 +9,10 @@ class ChatView extends React.Component {
     return (
       <div className="chat-view-container">
         <div className="left-view-container">
-          <ChatroomList id={_id} />
+          <NavigationBar id={_id} name={name} />
         </div>
         <div className="right-view-container">
-          <div className="right-nav-view">
-            <NavigationBar name={name} />
-          </div>
-          <div className="right-body-view">
-            <div className="chatroom-view">
-              <Chatroom id={_id} />
-            </div>
-          </div>
+          <Chatroom id={_id} name={name} />
         </div>
       </div>
     );

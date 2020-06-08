@@ -20,6 +20,7 @@ const handleInputSubmit = (event, message, id, room) => {
 
 const Chatroom = ({
   id,
+  name,
   messageList,
   addMessageList,
   setMessageList,
@@ -44,7 +45,7 @@ const Chatroom = ({
             key={data._id}
             sender={data.sender.name}
             text={data.message}
-            createdAt={data.createdAt}
+            timestamp={data.timestamp}
           />
         ))}
       </div>

@@ -1,0 +1,27 @@
+.nav-setting-dropdown-container {
+  position: absolute;
+  width: 100px;
+  border: 1px solid black;
+  background-color: white;
+  box-sizing: border-box;
+  z-index: 5;
+  margin: 3rem 0;
+
+  li {
+    color: black;
+    list-style-type: none;
+    padding: 0.5rem;
+    border-bottom: 1px solid grey;
+  }
+
+  .logout-button {
+    margin-left: auto;
+    margin-right: 0;
+    cursor: pointer;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: black;
+    text-transform: uppercase;
+    font-weight: bolder;
+  }
+}

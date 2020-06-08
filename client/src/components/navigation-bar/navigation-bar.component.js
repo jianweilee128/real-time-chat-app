@@ -1,37 +1,111 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import "./navigation-bar.scss";
-import { logout } from "../../redux/user/user.actions";
+import NavRoomCard from "../nav-room-card/nav-room-card.component";
+import { createRoom, createRoomSuccess } from "../../utils/socketFunctions";
+import { getRoomList, setRoomList } from "../../redux/room/room.actions";
+import { getOnlineUsers, setUserList } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
+import { setToggleDropdown } from "../../redux/room/room.actions";
+import NavSettingDropdown from "../nav-setting-dropdown/nav-setting-dropdown.component";
 
-const NavigationBar = ({ name, history, logout, currentRoom }) => {
-  function handleLogout() {
-    logout();
-    return history.push({
-      pathname: `/`,
-    });
-  }
+const NavigationBar = ({
+  id,
+  name,
+  getRoomList,
+  setRoomList,
+  roomList,
+  toggleDropdown,
+  setToggleDropdown,
+  getOnlineUsers,
+  setUserList,
+  userList,
+  currentRoom,
+}) => {
+  const [roomName, setRoomName] = useState("");
+  const [roomsOrUsers, setRoomsOrUsers] = useState("rooms");
+  useEffect(() => {
+    getRoomList().payload.then((res) => setRoomList(res.rooms));
+    getOnlineUsers().payload.then((res) => setUserList(res.users));
+    createRoomSuccess(setRoomList);
+  }, []); // eslint-disable-line
+
+  const handleRoomCreate = (e) => {
+    e.preventDefault();
+    createRoom(roomName, id);
+    document.getElementById("create-room-input").value = "";
+  };
+
+  const checkRoomsOrUsers = () => {
+    if (roomsOrUsers === "rooms" && roomList) {
+      return roomList.map((room) => (
+        <NavRoomCard room={room.name} key={room._id} id={room._id} />
+      ));
+    } else if (roomsOrUsers === "users" && userList) {
+      return userList.map((user) => (
+        <div className="user-list-card" key={user._id}>
+          {user.name}
+        </div>
+      ));
+    }
+  };
+
   return (
-    <div className="navigation-bar-container">
-      <h4>{name}</h4>
-      <h4>{currentRoom[0]}</h4>
-      <div className="logout-button" onClick={() => handleLogout()}>
-        Logout
+    <React.Fragment>
+      <div className="nav-container">
+        {/* Nav Profile */}
+        <div className="nav-profile-container">
+          <span>{name}</span>
+          <span className="nav-profile-room">
+            {currentRoom[0]
+              ? `Currently in: ${currentRoom[0]}`
+              : `Not in any room`}
+          </span>
+        </div>
+        <div className="nav-menu-container">
+          <div className="nav-menu">
+            <span onClick={() => setRoomsOrUsers("rooms")}>rooms</span>
+          </div>
+          <div className="nav-menu">
+            <span onClick={() => setRoomsOrUsers("users")}>users</span>
+          </div>
+          <div className="nav-menu">
+            <span onClick={() => setToggleDropdown()}>settings</span>
+            {toggleDropdown ? <NavSettingDropdown /> : null}
+          </div>
+        </div>
+        {checkRoomsOrUsers()}
       </div>
-    </div>
+      <div className="create-room-container">
+        <input
+          placeholder="Enter room name to create..."
+          type="text"
+          className="create-room-input"
+          id="create-room-input"
+          onChange={(e) => setRoomName(e.target.value)}
+        />
+        <button className="create-button" onClick={(e) => handleRoomCreate(e)}>
+          create room
+        </button>
+      </div>
+    </React.Fragment>
   );
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  logout: () => dispatch(logout()),
+  getRoomList: () => dispatch(getRoomList()),
+  setRoomList: (roomList) => dispatch(setRoomList(roomList)),
+  getOnlineUsers: () => dispatch(getOnlineUsers()),
+  setToggleDropdown: () => dispatch(setToggleDropdown()),
+  setUserList: (userList) => dispatch(setUserList(userList)),
 });
 
 const mapStateToProps = (state) => {
   return {
+    roomList: state.room.roomList,
+    toggleDropdown: state.room.toggleDropdown,
+    userList: state.user.userList,
     currentRoom: state.room.currentRoom,
   };
 };
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(NavigationBar)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);

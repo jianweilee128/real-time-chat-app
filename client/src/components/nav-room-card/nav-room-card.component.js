@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import "./chatroom-card.scss";
+import "./nav-room-card.scss";
 import {
   setCurrentRoom,
   setToggleDelete,
@@ -14,7 +14,7 @@ import ListenOutsideClick from "../../utils/listenOutsideClick";
 
 import { connect } from "react-redux";
 
-const ChatroomCard = ({
+const NavRoomCard = ({
   room,
   id,
   currentRoom,
@@ -25,16 +25,15 @@ const ChatroomCard = ({
 }) => {
   const ref = useRef();
   ListenOutsideClick(ref, () => {
-    console.log("test");
     if (toggleDelete === true) {
       setToggleDelete();
     }
   });
 
   return (
-    <div className="chatroom-card-container">
+    <div className="nav-room-card-container">
       <span
-        className="chatroom-card-text"
+        className="nav-room-card-text"
         onClick={() => {
           leaveRoom(currentRoom);
           joinRoom(id);
@@ -46,7 +45,7 @@ const ChatroomCard = ({
       {toggleDelete ? (
         <span
           ref={ref}
-          className="chatroom-card-options"
+          className="nav-room-card-options"
           onClick={() => {
             deleteRoom(id);
             deleteRoomSocket(id);
@@ -73,4 +72,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatroomCard);
+export default connect(mapStateToProps, mapDispatchToProps)(NavRoomCard);

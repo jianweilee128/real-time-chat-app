@@ -84,11 +84,10 @@ io.on("connection", (socket) => {
   });
 
   // Receive message from client to server
-  socket.on("input-message-emit", async (message, sender, createdAt, room) => {
+  socket.on("input-message-emit", async (message, sender, room) => {
     const newMessage = await messageController.createMessage(
       message,
       sender,
-      createdAt,
       room
     );
     const res = await Message.findById(newMessage._id);

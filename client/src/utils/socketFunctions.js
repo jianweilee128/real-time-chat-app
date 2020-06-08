@@ -7,7 +7,6 @@ export const inputMessageEmit = (message, id, room) => {
   socket.emit("input-message-emit", {
     message: message,
     sender: id,
-    createdAt: new Date().toLocaleString(),
     room: room,
   });
 };

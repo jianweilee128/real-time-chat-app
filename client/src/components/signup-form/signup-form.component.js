@@ -14,7 +14,7 @@ const SignupForm = ({ history, signup }) => {
     signup(name, email, password, passwordConfirm).payload.then((data) => {
       if (data && data.status === "success") {
         return history.push({
-          pathname: `/chat/${data.user._id}`,
+          pathname: "/chat",
           state: { user: data.user },
         });
       }
