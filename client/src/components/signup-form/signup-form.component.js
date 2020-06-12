@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./signup-form.scss";
 import { withRouter } from "react-router-dom";
-import { signup } from "../../redux/user/user.actions";
+import { signup, setCurrentUser } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
 
-const SignupForm = ({ history, signup }) => {
+const SignupForm = ({ history, signup, setCurrentUser }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,9 +13,9 @@ const SignupForm = ({ history, signup }) => {
   function handleSignup() {
     signup(name, email, password, passwordConfirm).payload.then((data) => {
       if (data && data.status === "success") {
+        setCurrentUser(data.user);
         return history.push({
           pathname: "/chat",
-          state: { user: data.user },
         });
       }
       return;
@@ -74,6 +74,7 @@ const SignupForm = ({ history, signup }) => {
 const mapDispatchToProps = (dispatch) => ({
   signup: (name, email, password, passwordConfirm) =>
     dispatch(signup(name, email, password, passwordConfirm)),
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
 export default withRouter(connect(null, mapDispatchToProps)(SignupForm));

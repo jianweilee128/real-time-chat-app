@@ -1,0 +1,21 @@
+.error-boundary-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100vw;
+
+  h1 {
+    font-size: 3rem;
+  }
+  span {
+    font-size: 2rem;
+  }
+  img {
+    padding: 3rem;
+    @media only screen and (max-width: 768px) {
+      padding: 1rem;
+    }
+  }
+}

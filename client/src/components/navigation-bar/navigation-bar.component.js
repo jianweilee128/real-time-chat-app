@@ -7,10 +7,11 @@ import { getOnlineUsers, setUserList } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
 import { setToggleDropdown } from "../../redux/room/room.actions";
 import NavSettingDropdown from "../nav-setting-dropdown/nav-setting-dropdown.component";
+import { ReactComponent as EditIcon } from "../../resources/img/edit.svg";
+import { toggleUpdateProfile } from "../../redux/user/user.actions";
 
 const NavigationBar = ({
-  id,
-  name,
+  user,
   getRoomList,
   setRoomList,
   roomList,
@@ -20,6 +21,7 @@ const NavigationBar = ({
   setUserList,
   userList,
   currentRoom,
+  toggleUpdateProfile,
 }) => {
   const [roomName, setRoomName] = useState("");
   const [roomsOrUsers, setRoomsOrUsers] = useState("rooms");
@@ -31,7 +33,7 @@ const NavigationBar = ({
 
   const handleRoomCreate = (e) => {
     e.preventDefault();
-    createRoom(roomName, id);
+    createRoom(roomName, user._id);
     document.getElementById("create-room-input").value = "";
   };
 
@@ -54,11 +56,14 @@ const NavigationBar = ({
       <div className="nav-container">
         {/* Nav Profile */}
         <div className="nav-profile-container">
-          <span>{name}</span>
+          <span>{user.name}</span>
           <span className="nav-profile-room">
             {currentRoom[0]
               ? `Currently in: ${currentRoom[0]}`
               : `Not in any room`}
+            <div className="edit-icon">
+              <EditIcon onClick={() => toggleUpdateProfile()} />
+            </div>
           </span>
         </div>
         <div className="nav-menu-container">
@@ -97,6 +102,7 @@ const mapDispatchToProps = (dispatch) => ({
   getOnlineUsers: () => dispatch(getOnlineUsers()),
   setToggleDropdown: () => dispatch(setToggleDropdown()),
   setUserList: (userList) => dispatch(setUserList(userList)),
+  toggleUpdateProfile: () => dispatch(toggleUpdateProfile()),
 });
 
 const mapStateToProps = (state) => {
@@ -105,6 +111,7 @@ const mapStateToProps = (state) => {
     toggleDropdown: state.room.toggleDropdown,
     userList: state.user.userList,
     currentRoom: state.room.currentRoom,
+    user: state.user.user,
   };
 };
 

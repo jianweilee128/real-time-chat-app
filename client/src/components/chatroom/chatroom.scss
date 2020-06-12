@@ -8,7 +8,7 @@
     height: 93%;
     text-align: left;
     justify-content: right;
-    overflow-y: scroll;
+    overflow-y: auto;
     -ms-overflow-style: none; /* Internet Explorer 10+ */
     scrollbar-width: none; /* Firefox */
 
@@ -21,6 +21,7 @@
     display: flex;
     flex-direction: row;
     height: 7%;
+
     .chatroom-text-input {
       width: 80%;
       padding: 1rem;

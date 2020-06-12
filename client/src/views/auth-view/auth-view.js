@@ -6,12 +6,8 @@ import SignupForm from "../../components/signup-form/signup-form.component";
 const AuthView = () => {
   return (
     <div className="auth-view-container">
-      <div className="auth-form-container">
-        <LoginForm />
-      </div>
-      <div className="auth-form-container">
-        <SignupForm />
-      </div>
+      <LoginForm />
+      <SignupForm />
     </div>
   );
 };

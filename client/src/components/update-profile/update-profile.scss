@@ -1,0 +1,78 @@
+.update-profile-view-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+
+  h1 {
+    text-transform: capitalize;
+    text-align: center;
+  }
+
+  span {
+    font-weight: bold;
+  }
+
+  .update-profile-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+
+    .update-profile-subtitle {
+      text-transform: capitalize;
+    }
+
+    .form-item {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      margin: 20px 0;
+      .form-label {
+        margin: 10px 0;
+        font-weight: bold;
+        text-align: left;
+        text-transform: capitalize;
+      }
+
+      .input-box {
+        padding: 20px;
+        box-sizing: border-box;
+      }
+    }
+    .update-profile-btn {
+      text-decoration: none;
+      width: 20%;
+      height: 50px;
+      letter-spacing: 0.5px;
+      line-height: 50px;
+      padding: 0;
+      font-size: 1rem;
+      box-sizing: border-box;
+      text-transform: uppercase;
+      font-family: "Source Sans Pro";
+      font-weight: bolder;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+
+      background-color: black;
+      color: white;
+      border: none;
+
+      &:hover {
+        background-color: white;
+        color: black;
+        border: 1px solid black;
+      }
+    }
+  }
+}

@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import "./login-form.scss";
-import { login } from "../../redux/user/user.actions";
+import { login, setCurrentUser } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
 
-const LoginForm = ({ history, login }) => {
+const LoginForm = ({ history, login, setCurrentUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function handleLogin() {
     login(email, password).payload.then((data) => {
       if (data && data.status === "success") {
+        setCurrentUser(data.user);
         return history.push({
           pathname: "/chat",
-          state: { user: data.user },
         });
       }
       return;
@@ -43,6 +43,9 @@ const LoginForm = ({ history, login }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
+      <Link to="/forgotPassword" className="forgot-password-button">
+        Forgot Password?
+      </Link>
       <div className="login-btn" onClick={() => handleLogin()}>
         login
       </div>
@@ -52,6 +55,7 @@ const LoginForm = ({ history, login }) => {
 
 const mapDispatchToProps = (dispatch) => ({
   login: (email, password) => dispatch(login(email, password)),
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
 export default withRouter(connect(null, mapDispatchToProps)(LoginForm));
