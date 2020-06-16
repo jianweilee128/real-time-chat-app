@@ -9,6 +9,7 @@ const roomRouter = require("./routes/roomRoutes");
 const ErrorHandler = require("./controllers/errorController");
 const connectDB = require("./connectDB");
 const AppError = require("./utils/appError");
+const jwt = require("jsonwebtoken");
 
 connectDB();
 const app = express();
@@ -67,13 +68,14 @@ server.listen(PORT, () => {
 const messageController = require("./controllers/messageController");
 const roomController = require("./controllers/roomController");
 const Room = require("./models/roomModel");
+const User = require("./models/userModel");
 const Message = require("./models/messageModel");
+const catchAsync = require("./utils/catchAsync");
 
 // Socket.io connection to listen to message
 io.on("connection", (socket) => {
   console.log("We have a new connection!");
 
-  // Join room
   socket.on("join-room", (room) => {
     socket.join(room);
   });
@@ -106,7 +108,23 @@ io.on("connection", (socket) => {
     await roomController.deleteRoom(id);
   });
 
+  socket.on("disconnecting", async () => {
+    try {
+      socket.request.headers.cookie.split(";").map(async (el) => {
+        if (el.trim().startsWith("jwt=")) {
+          let token = el.split("=")[1];
+          const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+          await User.findByIdAndUpdate(decoded.id, {
+            online: false,
+          }).select("+online");
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
   socket.on("disconnect", () => {
-    console.log("User has left");
+    console.log("User disconnected");
   });
 });

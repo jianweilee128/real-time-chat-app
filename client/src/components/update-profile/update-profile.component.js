@@ -1,22 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   updatePassword,
   updateProfile,
   setCurrentUser,
+  toggleUpdateProfile,
 } from "../../redux/user/user.actions";
 import "./update-profile.scss";
 import { connect } from "react-redux";
+import ListenOutsideClick from "../../utils/listenOutsideClick";
 
 const UpdateProfile = ({
   user,
   updatePassword,
   updateProfile,
   setCurrentUser,
+  isUpdateProfile,
+  toggleUpdateProfile,
 }) => {
   const [nameInput, setNameInput] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const ref = useRef();
+  ListenOutsideClick(ref, () => {
+    if (isUpdateProfile === true) {
+      toggleUpdateProfile();
+    }
+  });
 
   const handleUpdateProfile = (nameInput) => {
     updateProfile(nameInput).payload.then((res) => {
@@ -41,7 +52,7 @@ const UpdateProfile = ({
   };
 
   return (
-    <div className="update-profile-view-container">
+    <div className="update-profile-view-container" ref={ref}>
       <h1>Update profile</h1>
       <div className="update-profile-form">
         <h2 className="update-profile-subtitle">General Information</h2>
@@ -109,11 +120,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updatePassword(currentPassword, newPassword, newPasswordConfirm)),
   updateProfile: (name) => dispatch(updateProfile(name)),
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  toggleUpdateProfile: () => dispatch(toggleUpdateProfile()),
 });
 
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
+    isUpdateProfile: state.user.isUpdateProfile,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateProfile);
