@@ -10,7 +10,7 @@ export const getMessageList = (room) => {
     },
   })
     .then((res) => res.data)
-    .catch(() => console.log("Error in getting messages!"));
+    .catch(() => alert("Error in getting messages!"));
 
   return {
     type: MessageActionTypes.GET_MESSAGE_LIST,

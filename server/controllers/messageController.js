@@ -8,11 +8,3 @@ exports.getMessages = catchAsync(async (req, res, next) => {
     messages,
   });
 });
-
-exports.createMessage = async ({ message, sender, room }) => {
-  return await Message.create({
-    message: message,
-    sender: sender,
-    room: room,
-  });
-};

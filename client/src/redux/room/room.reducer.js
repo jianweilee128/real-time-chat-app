@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   currentRoom: [],
   roomList: [],
   toggleDropdown: false,
-  toggleDelete: false,
+  toggleOptionsPopup: false,
 };
 
 const roomReducer = (state = INITIAL_STATE, action) => {
@@ -16,6 +16,11 @@ const roomReducer = (state = INITIAL_STATE, action) => {
       };
     case RoomActionTypes.GET_ALL_ROOMS:
       return state;
+    case RoomActionTypes.ADD_ROOM_LIST:
+      return {
+        ...state,
+        roomList: state.roomList.concat(action.payload),
+      };
     case RoomActionTypes.SET_ROOM_LIST:
       return {
         ...state,
@@ -31,11 +36,10 @@ const roomReducer = (state = INITIAL_STATE, action) => {
         ...state,
         toggleDropdown: !state.toggleDropdown,
       };
-
-    case RoomActionTypes.SET_TOGGLE_DELETE:
+    case RoomActionTypes.SET_TOGGLE_OPTIONS_POPUP:
       return {
         ...state,
-        toggleDelete: !state.toggleDelete,
+        toggleOptionsPopup: !state.toggleOptionsPopup,
       };
     default:
       return state;

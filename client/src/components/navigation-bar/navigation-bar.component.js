@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./navigation-bar.scss";
 import NavRoomCard from "../nav-room-card/nav-room-card.component";
-import { createRoom, createRoomSuccess } from "../../utils/socketFunctions";
-import { getRoomList, setRoomList } from "../../redux/room/room.actions";
-import { getOnlineUsers, setUserList } from "../../redux/user/user.actions";
+import {
+  getRoomList,
+  setRoomList,
+  setToggleOptionsPopup,
+} from "../../redux/room/room.actions";
 import { connect } from "react-redux";
-import { setToggleDropdown } from "../../redux/room/room.actions";
-import NavSettingDropdown from "../nav-setting-dropdown/nav-setting-dropdown.component";
 import { ReactComponent as EditIcon } from "../../resources/img/edit.svg";
+import { ReactComponent as AddIcon } from "../../resources/img/add.svg";
 import { toggleUpdateProfile } from "../../redux/user/user.actions";
 
 const NavigationBar = ({
@@ -15,101 +16,65 @@ const NavigationBar = ({
   getRoomList,
   setRoomList,
   roomList,
-  toggleDropdown,
-  setToggleDropdown,
-  getOnlineUsers,
-  setUserList,
-  userList,
   currentRoom,
+  setToggleOptionsPopup,
+  socketRef,
   toggleUpdateProfile,
 }) => {
-  const [roomName, setRoomName] = useState("");
-  const [roomsOrUsers, setRoomsOrUsers] = useState("rooms");
   useEffect(() => {
-    getRoomList().payload.then((res) => setRoomList(res.rooms));
-    getOnlineUsers().payload.then((res) => setUserList(res.users));
-    createRoomSuccess(setRoomList);
+    getRoomList(user._id).payload.then((res) => {
+      setRoomList(res.rooms);
+    });
   }, []); // eslint-disable-line
 
-  const handleRoomCreate = (e) => {
-    e.preventDefault();
-    createRoom(roomName, user._id);
-    document.getElementById("create-room-input").value = "";
-  };
-
-  const checkRoomsOrUsers = () => {
-    if (roomsOrUsers === "rooms" && roomList) {
-      return roomList.map((room) => (
-        <NavRoomCard room={room.name} key={room._id} id={room._id} />
-      ));
-    } else if (roomsOrUsers === "users" && userList) {
-      return userList.map((user) => (
-        <div className="user-list-card" key={user._id}>
-          {user.name}
-        </div>
-      ));
-    }
-  };
-
   return (
-    <React.Fragment>
-      <div className="nav-container">
-        {/* Nav Profile */}
-        <div className="nav-profile-container">
-          <span>{user.name}</span>
-          <span className="nav-profile-room">
-            {currentRoom[0]
-              ? `Currently in: ${currentRoom[0]}`
-              : `Not in any room`}
-            <div className="edit-icon">
-              <EditIcon onClick={() => toggleUpdateProfile()} />
-            </div>
-          </span>
-        </div>
-        <div className="nav-menu-container">
-          <div className="nav-menu">
-            <span onClick={() => setRoomsOrUsers("rooms")}>rooms</span>
+    <div className="nav-container">
+      {/* Nav Profile */}
+      <div className="nav-profile-container">
+        <h5>{user.name}</h5>
+        <h6>{`ID:${user._id}`}</h6>
+        <span className="nav-profile-room">
+          {currentRoom[0]
+            ? `Currently in: ${currentRoom[0]}`
+            : `Not in any room`}
+          <div className="edit-icon">
+            <EditIcon onClick={() => toggleUpdateProfile()} />
           </div>
-          <div className="nav-menu">
-            <span onClick={() => setRoomsOrUsers("users")}>users</span>
-          </div>
-          <div className="nav-menu">
-            <span onClick={() => setToggleDropdown()}>settings</span>
-            {toggleDropdown ? <NavSettingDropdown /> : null}
-          </div>
-        </div>
-        {checkRoomsOrUsers()}
+        </span>
       </div>
-      <div className="create-room-container">
-        <input
-          placeholder="Enter room name to create..."
-          type="text"
-          className="create-room-input"
-          id="create-room-input"
-          onChange={(e) => setRoomName(e.target.value)}
-        />
-        <button className="create-button" onClick={(e) => handleRoomCreate(e)}>
-          create room
-        </button>
+      {/* Nav Settings & Rooms View */}
+      <div className="nav-menu-container">
+        <div className="nav-menu rooms">
+          <span>rooms</span>
+        </div>
+        <div className="nav-menu add-icon">
+          <AddIcon onClick={() => setToggleOptionsPopup()} />
+        </div>
       </div>
-    </React.Fragment>
+      <div className="nav-menu-cards">
+        {roomList.map((room) => (
+          <NavRoomCard
+            room={room.name}
+            key={room._id}
+            roomId={room._id}
+            socketRef={socketRef}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getRoomList: () => dispatch(getRoomList()),
+  getRoomList: (userId) => dispatch(getRoomList(userId)),
   setRoomList: (roomList) => dispatch(setRoomList(roomList)),
-  getOnlineUsers: () => dispatch(getOnlineUsers()),
-  setToggleDropdown: () => dispatch(setToggleDropdown()),
-  setUserList: (userList) => dispatch(setUserList(userList)),
+  setToggleOptionsPopup: () => dispatch(setToggleOptionsPopup()),
   toggleUpdateProfile: () => dispatch(toggleUpdateProfile()),
 });
 
 const mapStateToProps = (state) => {
   return {
     roomList: state.room.roomList,
-    toggleDropdown: state.room.toggleDropdown,
-    userList: state.user.userList,
     currentRoom: state.room.currentRoom,
     user: state.user.user,
   };

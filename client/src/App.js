@@ -5,6 +5,7 @@ import ChatView from "./views/chat-view/chat-view";
 import { Switch, Route } from "react-router-dom";
 import ForgotPasswordView from "./views/forgot-password-view/forgot-password-view";
 import ResetPasswordView from "./views/reset-password-view/reset-password-view";
+import ProtectedRoute from "./utils/ProtectedRoute";
 import ErrorBoundary from "./components/error-boundary/error-boundary";
 import Spinner from "./components/spinner/spinner.component";
 
@@ -14,7 +15,7 @@ const App = () => (
       <ErrorBoundary>
         <Suspense fallback={<Spinner />}>
           <Route exact path="/" component={AuthView} />
-          <Route path="/chat" component={ChatView} />
+          <ProtectedRoute path="/chat" component={ChatView} />
           <Route path="/forgotPassword" component={ForgotPasswordView} />
           <Route path="/resetPassword/:token" component={ResetPasswordView} />
         </Suspense>

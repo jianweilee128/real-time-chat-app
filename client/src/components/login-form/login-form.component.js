@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import "./login-form.scss";
-import { login, setCurrentUser } from "../../redux/user/user.actions";
+import {
+  login,
+  setCurrentUser,
+  toggleIsAuthenticated,
+} from "../../redux/user/user.actions";
 import { connect } from "react-redux";
 
-const LoginForm = ({ history, login, setCurrentUser }) => {
+const LoginForm = ({
+  history,
+  login,
+  setCurrentUser,
+  toggleIsAuthenticated,
+}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,6 +21,7 @@ const LoginForm = ({ history, login, setCurrentUser }) => {
     login(email, password).payload.then((data) => {
       if (data && data.status === "success") {
         setCurrentUser(data.user);
+        toggleIsAuthenticated();
         return history.push({
           pathname: "/chat",
         });
@@ -56,6 +66,7 @@ const LoginForm = ({ history, login, setCurrentUser }) => {
 const mapDispatchToProps = (dispatch) => ({
   login: (email, password) => dispatch(login(email, password)),
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  toggleIsAuthenticated: () => dispatch(toggleIsAuthenticated()),
 });
 
 export default withRouter(connect(null, mapDispatchToProps)(LoginForm));

@@ -70,42 +70,51 @@ const roomController = require("./controllers/roomController");
 const Room = require("./models/roomModel");
 const User = require("./models/userModel");
 const Message = require("./models/messageModel");
-const catchAsync = require("./utils/catchAsync");
 
 // Socket.io connection to listen to message
 io.on("connection", (socket) => {
   console.log("We have a new connection!");
 
-  socket.on("join-room", (room) => {
-    socket.join(room);
+  socket.on("join-room", (roomId) => {
+    socket.join(roomId);
   });
 
   // Leave room
-  socket.on("leave-room", (room) => {
-    socket.leave(room);
+  socket.on("leave-room", (roomId) => {
+    socket.leave(roomId);
   });
 
   // Receive message from client to server
-  socket.on("input-message-emit", async (message, sender, room) => {
-    const newMessage = await messageController.createMessage(
-      message,
-      sender,
-      room
-    );
+  socket.on("input-message-emit", async ({ message, sender, room }) => {
+    const newMessage = await Message.create({
+      message: message,
+      sender: sender,
+      room: room,
+    });
     const res = await Message.findById(newMessage._id);
     // Return message from server to client and to specific room
     return io.to(res.room._id).emit("input-message-receive", res);
   });
 
-  socket.on("room-create", async (name, user) => {
-    await roomController.createRoom(name, user);
-
-    const res = await Room.find();
+  socket.on("room-create", async ({ name, userId }) => {
+    await Room.create({
+      name: name,
+      users: [userId],
+    });
+    const res = await Room.find({ users: { $in: userId } });
     return io.emit("room-create-success", res);
   });
 
-  socket.on("room-delete", async (id) => {
-    await roomController.deleteRoom(id);
+  socket.on("room-join", async ({ roomId, userId }) => {
+    const room = await Room.findById(roomId).select("+users");
+    room.users.push(userId);
+    room.save();
+    return io.emit("room-join-success", room);
+  });
+
+  socket.on("room-delete", async (roomId) => {
+    await Room.findByIdAndDelete(roomId);
+    await Message.deleteMany({ room: roomId });
   });
 
   socket.on("disconnecting", async () => {

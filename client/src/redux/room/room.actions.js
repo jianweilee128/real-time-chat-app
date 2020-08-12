@@ -6,13 +6,13 @@ export const setCurrentRoom = (room) => ({
   payload: room,
 });
 
-export const getRoomList = () => {
+export const getRoomList = (userId) => {
   const request = axios({
     method: "get",
-    url: "/api/v1/rooms",
+    url: `/api/v1/rooms/${userId}`,
   })
     .then((res) => res.data)
-    .catch(() => console.log("Error in getting messages!"));
+    .catch(() => alert("Error in getting messages!"));
 
   return {
     type: RoomActionTypes.GET_ALL_ROOMS,
@@ -20,6 +20,12 @@ export const getRoomList = () => {
   };
 };
 
+export const addRoomList = (roomToJoin) => {
+  return {
+    type: RoomActionTypes.ADD_ROOM_LIST,
+    payload: roomToJoin,
+  };
+};
 export const setRoomList = (roomList) => {
   return {
     type: RoomActionTypes.SET_ROOM_LIST,
@@ -39,9 +45,8 @@ export const setToggleDropdown = () => {
     type: RoomActionTypes.SET_TOGGLE_DROPDOWN,
   };
 };
-
-export const setToggleDelete = () => {
+export const setToggleOptionsPopup = () => {
   return {
-    type: RoomActionTypes.SET_TOGGLE_DELETE,
+    type: RoomActionTypes.SET_TOGGLE_OPTIONS_POPUP,
   };
 };

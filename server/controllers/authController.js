@@ -56,7 +56,6 @@ exports.signin = catchAsync(async (req, res, next) => {
   if (!user || !(await user.checkCorrectPassword(password, user.password))) {
     return next(new AppError("Incorrect email or password", 401));
   }
-
   await User.findByIdAndUpdate(user._id, { online: true });
 
   createAndSendToken(user, 200, res);
@@ -175,7 +174,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   ) {
     return next(new AppError("Your current password is wrong", 401));
   }
-  console.log(user);
   // 3) If so, update password
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;

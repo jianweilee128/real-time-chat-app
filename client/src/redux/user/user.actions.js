@@ -54,6 +54,12 @@ export const logout = () => {
   };
 };
 
+export const toggleIsAuthenticated = () => {
+  return {
+    type: UserActionTypes.IS_AUTHENTICATED,
+  };
+};
+
 export const forgotPassword = (email) => {
   const request = axios({
     method: "post",
@@ -112,19 +118,6 @@ export const updatePassword = (
 };
 
 // User Requests
-export const getOnlineUsers = () => {
-  const request = axios({
-    method: "get",
-    url: "/api/v1/users/online",
-  })
-    .then((res) => res.data)
-    .catch(() => alert("Error in getting users! Please try again..."));
-
-  return {
-    type: UserActionTypes.GET_ONLINE_USER,
-    payload: request,
-  };
-};
 
 export const setCurrentUser = (user) => {
   return {
@@ -133,6 +126,11 @@ export const setCurrentUser = (user) => {
   };
 };
 
+export const toggleUpdateProfile = () => {
+  return {
+    type: UserActionTypes.TOGGLE_UPDATE_PROFILE,
+  };
+};
 export const updateProfile = (name) => {
   const request = axios({
     method: "patch",
@@ -147,18 +145,5 @@ export const updateProfile = (name) => {
   return {
     type: UserActionTypes.UPDATE_PROFILE,
     payload: request,
-  };
-};
-
-export const setUserList = (userList) => {
-  return {
-    type: UserActionTypes.SET_USER_LIST,
-    payload: userList,
-  };
-};
-
-export const toggleUpdateProfile = () => {
-  return {
-    type: UserActionTypes.TOGGLE_UPDATE_PROFILE,
   };
 };

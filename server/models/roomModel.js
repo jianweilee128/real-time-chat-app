@@ -5,15 +5,17 @@ const roomSchema = new mongoose.Schema({
     type: String,
     required: [true, "There must be a room name"],
   },
-  users: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: [true, "Message must have a sender"],
-  },
+  users: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: [true, "Message must have a sender"],
+    },
+  ],
 });
 
 roomSchema.pre(/^find/, function (next) {
-  this.select("-__v -users");
+  this.select("-__v");
   next();
 });
 

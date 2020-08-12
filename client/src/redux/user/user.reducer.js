@@ -2,7 +2,7 @@ import UserActionTypes from "./user.types";
 
 const INITIAL_STATE = {
   user: {},
-  userList: [],
+  isAuthenticated: false,
   isUpdateProfile: false,
 };
 
@@ -14,6 +14,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return state;
     case UserActionTypes.LOGOUT_USER:
       return state;
+    case UserActionTypes.IS_AUTHENTICATED:
+      return {
+        ...state,
+        isAuthenticated: !state.isAuthenticated,
+      };
     case UserActionTypes.SET_CURRENT_USER:
       return {
         ...state,
@@ -25,20 +30,13 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return state;
     case UserActionTypes.UPDATE_PASSWORD:
       return state;
-    case UserActionTypes.GET_ONLINE_USER:
-      return state;
-    case UserActionTypes.UPDATE_PROFILE:
-      return state;
-    case UserActionTypes.SET_USER_LIST:
-      return {
-        ...state,
-        userList: action.payload,
-      };
     case UserActionTypes.TOGGLE_UPDATE_PROFILE:
       return {
         ...state,
         isUpdateProfile: !state.isUpdateProfile,
       };
+    case UserActionTypes.UPDATE_PROFILE:
+      return state;
     default:
       return state;
   }

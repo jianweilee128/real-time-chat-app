@@ -19,7 +19,7 @@ router.post(
 );
 
 // User routes
-router.get("/online", authController.protect, userController.getOnlineUsers);
+// router.get("/online", authController.protect, userController.getOnlineUsers);
 router.patch(
   "/updateProfile",
   authController.protect,

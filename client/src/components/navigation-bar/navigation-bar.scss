@@ -1,9 +1,9 @@
 .nav-container {
   display: flex;
   flex-direction: column;
-  height: 85%;
+  height: 100%;
   margin: 0 1rem;
-
+  overflow: hidden;
   .nav-profile-container {
     text-align: left;
     border-bottom: 1px solid grey;
@@ -12,11 +12,19 @@
     padding: 20px;
     justify-content: left;
 
+    h5 {
+      text-transform: capitalize;
+      margin: 0;
+    }
+
+    h6 {
+      margin: 0.5rem 0;
+    }
+
     .nav-profile-room {
       text-transform: uppercase;
       text-emphasis: bold;
       font-size: 0.7rem;
-      padding-top: 10px;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -49,11 +57,10 @@
 
     .nav-menu {
       padding: 0.5rem;
-      width: 33%;
       box-sizing: border-box;
       text-transform: uppercase;
-      background: black;
-      color: white;
+      background: white;
+      color: black;
       font-family: "Source Sans Pro";
       border: none;
       font-size: 0.8rem;
@@ -65,50 +72,24 @@
       justify-content: center;
       align-items: center;
     }
-  }
-}
+    .rooms {
+      width: 80%;
+    }
 
-.create-room-container {
-  display: flex;
-  flex-direction: column;
-  height: 15%;
-  
-
-  .create-room-input {
-    border: 1px solid black;
-    opacity: 0.7;
-    padding: 20px;
-    box-sizing: border-box;
-    color: black;
-    outline: none;
-    font-size: 0.8rem;
-    width: 100%;
+    .add-icon {
+      width: 20%;
+      cursor: pointer;
+      height: 2.5rem;
+    }
   }
 
-  .create-button {
-    width: 100%;
-    height: 100%;
-    letter-spacing: 0.5px;
-    padding: 1rem;
-    box-sizing: border-box;
-    font-size: 15px;
-    text-transform: uppercase;
-    font-family: "Source Sans Pro";
-    font-weight: bolder;
-    border: none;
+  .nav-menu-cards {
+    overflow-y: auto;
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
 
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background-color: black;
-    color: white;
-
-    &:hover {
-      background-color: white;
-      color: black;
-      border: 1px solid black;
+    &::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
     }
   }
 }

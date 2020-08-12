@@ -3,9 +3,6 @@ const roomController = require("../controllers/roomController");
 
 const router = express.Router();
 
-router
-  .route("/")
-  .get(roomController.getAllRooms)
-  .post(roomController.deleteRoom);
+router.get("/:id", roomController.getAllRooms);
 
 module.exports = router;
