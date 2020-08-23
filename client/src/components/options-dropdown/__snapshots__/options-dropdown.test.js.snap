@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OptionsDropdown component should render OptionsDropdown component 1`] = `ShallowWrapper {}`;

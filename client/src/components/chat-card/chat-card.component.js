@@ -3,9 +3,10 @@ import "./chat-card.scss";
 
 const ChatCard = ({ sender, text, timestamp }) => (
   <div className="chatcard-container">
-    <h3 className="chatcard-info">
-      {sender} <span>{timestamp}</span>
-    </h3>
+    <div className="chatcard-info">
+      <span className="sender">{sender}</span>
+      <span className="timestamp">{timestamp}</span>
+    </div>
     <span className="chatcard-text">{text}</span>
   </div>
 );

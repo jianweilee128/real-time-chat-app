@@ -8,7 +8,7 @@ import roomReducer from "./room/room.reducer";
 const userPersistConfig = {
   key: "user",
   storage: sessionStorage,
-  blacklist: ["isUpdateProfile", "userList"],
+  blacklist: ["isUpdateProfile"],
 };
 const rootReducer = combineReducers({
   user: persistReducer(userPersistConfig, userReducer),

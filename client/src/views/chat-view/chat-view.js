@@ -5,11 +5,10 @@ import ChatCard from "../../components/chat-card/chat-card.component";
 import UpdateProfile from "../../components/update-profile/update-profile.component";
 import OptionsPopup from "../../components/options-popup/options-popup.component";
 import {
-  getMessageList,
   addMessageList,
-  setMessageList,
+  fetchMessages,
 } from "../../redux/message/message.actions";
-import { setRoomList, addRoomList } from "../../redux/room/room.actions";
+import { addRoomList } from "../../redux/room/room.actions";
 import { setToggleDropdown } from "../../redux/room/room.actions";
 import OptionsDropdown from "../../components/options-dropdown/options-dropdown.component";
 import { ReactComponent as SettingsIcon } from "../../resources/img/settings.svg";
@@ -22,22 +21,26 @@ const ChatView = ({
   setMessageList,
   addMessageList,
   currentRoom,
-  setRoomList,
   toggleOptionsPopup,
   setToggleDropdown,
   toggleDropdown,
   isUpdateProfile,
   addRoomList,
+  userInRoom,
+  fetchMessages,
 }) => {
   const [message, setMessage] = useState("");
   const server = "http://localhost:5000/";
   const socketRef = useRef();
-  const endRef = useRef();
-  const scrollToBottom = () => {
-    endRef.current.scrollIntoView({
-      behavior: "smooth",
-    });
-  };
+  const endRef = useRef(null);
+
+  useEffect(() => {
+    if (endRef.current) {
+      endRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [messageList, addMessageList]);
 
   useEffect(() => {
     socketRef.current = io.connect(server);
@@ -45,7 +48,7 @@ const ChatView = ({
 
   useEffect(() => {
     socketRef.current.on("room-create-success", (res) => {
-      setRoomList(res);
+      addRoomList(res);
     });
     socketRef.current.on("input-message-receive", (res) => {
       addMessageList(res);
@@ -53,13 +56,12 @@ const ChatView = ({
     socketRef.current.on("room-join-success", (res) => {
       addRoomList(res);
     });
-  }, [setRoomList, addMessageList, addRoomList]);
+  }, [addMessageList, addRoomList]);
 
   useEffect(() => {
-    getMessageList(currentRoom[1]).payload.then((res) => {
-      setMessageList(res.messages);
-    });
-  }, [currentRoom, setMessageList]);
+    fetchMessages(currentRoom[1]);
+  }, [currentRoom, fetchMessages]);
+
   const handleInputSubmit = (e) => {
     e.preventDefault();
     socketRef.current.emit("input-message-emit", {
@@ -70,10 +72,6 @@ const ChatView = ({
     document.getElementById("chatroom-text-input").value = "";
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messageList]);
-
   return (
     <div className="chat-view-container">
       <div className="left-view-container">
@@ -81,7 +79,12 @@ const ChatView = ({
       </div>
       <div className="right-view-container">
         <div className="chatroom-options">
-          <h6>{`Room ID: ${currentRoom[1]}`}</h6>
+          {userInRoom ? (
+            <React.Fragment>
+              <h5>{currentRoom[0]}</h5>
+              <h5>{`Room ID: ${currentRoom[1]}`}</h5>
+            </React.Fragment>
+          ) : null}
           <div className="settings-icon">
             <SettingsIcon onClick={() => setToggleDropdown()} />
             {toggleDropdown ? <OptionsDropdown socketRef={socketRef} /> : null}
@@ -102,22 +105,24 @@ const ChatView = ({
               ))}
               <div ref={endRef} />
             </div>
-            <div className="chatroom-input">
-              <input
-                type="text"
-                className="chatroom-text-input"
-                id="chatroom-text-input"
-                name="chatroom-text-input"
-                placeholder="Write your message..."
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <button
-                className="submit-button"
-                onClick={(e) => handleInputSubmit(e)}
-              >
-                Submit
-              </button>
-            </div>
+            {userInRoom ? (
+              <div className="chatroom-input">
+                <input
+                  type="text"
+                  className="chatroom-text-input"
+                  id="chatroom-text-input"
+                  name="chatroom-text-input"
+                  placeholder="Write your message..."
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+                <button
+                  className="submit-button"
+                  onClick={(e) => handleInputSubmit(e)}
+                >
+                  Submit
+                </button>
+              </div>
+            ) : null}
           </React.Fragment>
         )}
       </div>
@@ -127,10 +132,8 @@ const ChatView = ({
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getMessageList: (room) => dispatch(getMessageList(room)),
+  fetchMessages: (room) => dispatch(fetchMessages(room)),
   addMessageList: (messageItem) => dispatch(addMessageList(messageItem)),
-  setMessageList: (messageList) => dispatch(setMessageList(messageList)),
-  setRoomList: (roomList) => dispatch(setRoomList(roomList)),
   setToggleDropdown: () => dispatch(setToggleDropdown()),
   addRoomList: (roomToJoin) => dispatch(addRoomList(roomToJoin)),
 });
@@ -143,7 +146,7 @@ const mapStateToProps = (state) => {
     toggleDropdown: state.room.toggleDropdown,
     toggleOptionsPopup: state.room.toggleOptionsPopup,
     isUpdateProfile: state.user.isUpdateProfile,
-    roomList: state.room.roomList,
+    userInRoom: state.room.userInRoom,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ChatView);

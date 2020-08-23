@@ -1,20 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import { ReactComponent as CloseIcon } from "../../resources/img/close.svg";
 import {
   updatePassword,
   updateProfile,
-  setCurrentUser,
   toggleUpdateProfile,
 } from "../../redux/user/user.actions";
 import "./update-profile.scss";
 import { connect } from "react-redux";
-import ListenOutsideClick from "../../utils/listenOutsideClick";
 
 const UpdateProfile = ({
   user,
   updatePassword,
   updateProfile,
-  setCurrentUser,
-  isUpdateProfile,
   toggleUpdateProfile,
 }) => {
   const [nameInput, setNameInput] = useState("");
@@ -22,40 +19,14 @@ const UpdateProfile = ({
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const ref = useRef();
-  ListenOutsideClick(ref, () => {
-    if (isUpdateProfile === true) {
-      toggleUpdateProfile();
-    }
-  });
-
-  const handleUpdateProfile = (nameInput) => {
-    updateProfile(nameInput).payload.then((res) => {
-      if (res.status && res.status === "success") setCurrentUser(res.user);
-      else alert("Error in updating profile!");
-    });
-  };
-
-  const handleUpdatePassword = (
-    currentPassword,
-    newPassword,
-    newPasswordConfirm
-  ) => {
-    updatePassword(
-      currentPassword,
-      newPassword,
-      newPasswordConfirm
-    ).payload.then((res) => {
-      if (res.status && res.status === "success") return;
-      else alert("Error in updating password!");
-    });
-  };
-
   return (
-    <div className="update-profile-view-container" ref={ref}>
+    <div className="update-profile-container">
+      <div className="test-icon">
+        <CloseIcon onClick={() => toggleUpdateProfile()} />
+      </div>
       <h1>Update profile</h1>
       <div className="update-profile-form">
-        <h2 className="update-profile-subtitle">General Information</h2>
+        <h3 className="update-profile-subtitle">General Information</h3>
         <div className="form-item">
           <label className="form-label">name</label>
           <input
@@ -69,12 +40,12 @@ const UpdateProfile = ({
         </div>
         <div
           className="update-profile-btn"
-          onClick={() => handleUpdateProfile(nameInput)}
+          onClick={() => updateProfile(nameInput)}
         >
           update profile
         </div>
 
-        <h2 className="update-profile-subtitle">Update my password</h2>
+        <h3 className="update-profile-subtitle">Update my password</h3>
         <div className="form-item">
           <label className="form-label">current password</label>
           <input
@@ -105,7 +76,7 @@ const UpdateProfile = ({
         <div
           className="update-profile-btn"
           onClick={() =>
-            handleUpdatePassword(currentPassword, newPassword, confirmPassword)
+            updatePassword(currentPassword, newPassword, confirmPassword)
           }
         >
           update password
@@ -119,14 +90,12 @@ const mapDispatchToProps = (dispatch) => ({
   updatePassword: (currentPassword, newPassword, newPasswordConfirm) =>
     dispatch(updatePassword(currentPassword, newPassword, newPasswordConfirm)),
   updateProfile: (name) => dispatch(updateProfile(name)),
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
   toggleUpdateProfile: () => dispatch(toggleUpdateProfile()),
 });
 
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
-    isUpdateProfile: state.user.isUpdateProfile,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateProfile);

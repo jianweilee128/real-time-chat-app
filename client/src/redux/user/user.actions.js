@@ -1,97 +1,126 @@
 import axios from "axios";
 import UserActionTypes from "./user.types";
 
-// Auth Requests
+// Axios Requests For Auth and Users
 export const login = (email, password) => {
-  const request = axios({
-    method: "post",
-    url: "/api/v1/users/signin",
-    data: {
-      email: email,
-      password: password,
-    },
-  })
-    .then((res) => res.data)
-    .catch(() => alert("Error in logging in! Please try again..."));
+  return (dispatch) => {
+    axios({
+      method: "post",
+      url: "/api/v1/users/signin",
+      data: {
+        email: email,
+        password: password,
+      },
+    })
+      .then((res) => {
+        dispatch(loginSuccess(res.data.user));
+      })
+      .catch(() =>
+        alert("Something occured while trying to log you in. Please try again!")
+      );
+  };
+};
 
+export const loginSuccess = (user) => {
   return {
-    type: UserActionTypes.LOGIN_USER,
-    payload: request,
+    type: UserActionTypes.LOGIN_USER_SUCCESS,
+    payload: user,
   };
 };
 
 export const signup = (name, email, password, passwordConfirm) => {
-  const request = axios({
-    method: "post",
-    url: "/api/v1/users/signup",
-    data: {
-      name: name,
-      email: email,
-      password: password,
-      passwordConfirm: passwordConfirm,
-    },
-  })
-    .then((res) => res.data)
-    .catch(() => alert("Error in signing up! Please try again..."));
+  return (dispatch) => {
+    axios({
+      method: "post",
+      url: "/api/v1/users/signup",
+      data: {
+        name: name,
+        email: email,
+        password: password,
+        passwordConfirm: passwordConfirm,
+      },
+    })
+      .then((res) => dispatch(signupSuccess(res.data.user)))
+      .catch(() =>
+        alert(
+          "Something occured while trying to sign you up. Please try again!"
+        )
+      );
+  };
+};
 
+export const signupSuccess = (user) => {
   return {
-    type: UserActionTypes.SIGNUP_USER,
-    payload: request,
+    type: UserActionTypes.SIGNUP_USER_SUCCESS,
+    payload: user,
   };
 };
 
 export const logout = () => {
-  const request = axios({
-    method: "get",
-    url: "/api/v1/users/logout",
-  })
-    .then((res) => res)
-    .catch(() => alert("Error in logging out! Please try again..."));
-
-  return {
-    type: UserActionTypes.LOGOUT_USER,
-    payload: request,
+  return (dispatch) => {
+    axios({
+      method: "get",
+      url: "/api/v1/users/logout",
+    })
+      .then(() => dispatch(logoutSuccess()))
+      .catch(() =>
+        alert("Something occured while trying to logout. Please try again!")
+      );
   };
 };
 
-export const toggleIsAuthenticated = () => {
+export const logoutSuccess = () => {
   return {
-    type: UserActionTypes.IS_AUTHENTICATED,
+    type: UserActionTypes.LOGOUT_USER_SUCCESS,
   };
 };
 
 export const forgotPassword = (email) => {
-  const request = axios({
-    method: "post",
-    url: "/api/v1/users/forgotPassword",
-    data: {
-      email: email,
-    },
-  })
-    .then((res) => res)
-    .catch(() => alert("Error in resetting password! Please try again..."));
+  return (dispatch) => {
+    axios({
+      method: "post",
+      url: "/api/v1/users/forgotPassword",
+      data: {
+        email: email,
+      },
+    })
+      .then(() => dispatch(forgotPasswordSuccess()))
+      .catch(() =>
+        alert(
+          "Something occured while trying to send a link to your email to reset it. Please try again!"
+        )
+      );
+  };
+};
 
+export const forgotPasswordSuccess = () => {
   return {
-    type: UserActionTypes.FORGOT_PASSWORD,
-    payload: request,
+    type: UserActionTypes.FORGOT_PASSWORD_SUCCESS,
   };
 };
 
 export const resetPassword = (token, newPassword, newPasswordConfirm) => {
-  const request = axios({
-    method: "patch",
-    url: `/api/v1/users/resetPassword/${token}`,
-    data: {
-      password: newPassword,
-      passwordConfirm: newPasswordConfirm,
-    },
-  })
-    .then((res) => res)
-    .catch(() => alert("Error in resetting password! Please try again..."));
+  return (dispatch) => {
+    axios({
+      method: "patch",
+      url: `/api/v1/users/resetPassword/${token}`,
+      data: {
+        password: newPassword,
+        passwordConfirm: newPasswordConfirm,
+      },
+    })
+      .then(() => dispatch(resetPasswordSuccess()))
+      .catch(() =>
+        alert(
+          "Something occured while trying to reset your password. Please try again!"
+        )
+      );
+  };
+};
 
+export const resetPasswordSuccess = () => {
   return {
-    type: UserActionTypes.FORGOT_PASSWORD,
-    payload: request,
+    type: UserActionTypes.RESET_PASSWORD_SUCCESS,
   };
 };
 export const updatePassword = (
@@ -99,51 +128,66 @@ export const updatePassword = (
   newPassword,
   newPasswordConfirm
 ) => {
-  const request = axios({
-    method: "post",
-    url: `/api/v1/users/updatePassword`,
-    data: {
-      currentPassword: currentPassword,
-      password: newPassword,
-      passwordConfirm: newPasswordConfirm,
-    },
-  })
-    .then((res) => res.data)
-    .catch(() => alert("Error in resetting password! Please try again..."));
-
-  return {
-    type: UserActionTypes.UPDATE_PASSWORD,
-    payload: request,
+  return (dispatch) => {
+    axios({
+      method: "post",
+      url: `/api/v1/users/updatePassword`,
+      data: {
+        currentPassword: currentPassword,
+        password: newPassword,
+        passwordConfirm: newPasswordConfirm,
+      },
+    })
+      .then(() => dispatch(updatePasswordSuccess()))
+      .catch(() =>
+        alert(
+          "Something occured while trying to update your password. Please check if you have entered your current password correctly!"
+        )
+      );
   };
 };
 
-// User Requests
-
-export const setCurrentUser = (user) => {
+export const updatePasswordSuccess = () => {
   return {
-    type: UserActionTypes.SET_CURRENT_USER,
+    type: UserActionTypes.UPDATE_PASSWORD_SUCCESS,
+  };
+};
+
+export const updateProfile = (name) => {
+  return (dispatch) => {
+    axios({
+      method: "patch",
+      url: "/api/v1/users/updateProfile",
+      data: {
+        name: name,
+      },
+    })
+      .then((res) => dispatch(updateProfileSuccess(res.data.user)))
+      .catch(() =>
+        alert(
+          "Something occured while trying to update your profile. Please try again!"
+        )
+      );
+  };
+};
+
+export const updateProfileSuccess = (user) => {
+  return {
+    type: UserActionTypes.UPDATE_PROFILE_SUCCESS,
     payload: user,
   };
 };
+
+// User Actions
 
 export const toggleUpdateProfile = () => {
   return {
     type: UserActionTypes.TOGGLE_UPDATE_PROFILE,
   };
 };
-export const updateProfile = (name) => {
-  const request = axios({
-    method: "patch",
-    url: "/api/v1/users/updateProfile",
-    data: {
-      name: name,
-    },
-  })
-    .then((res) => res.data)
-    .catch(() => alert("Error in getting users! Please try again..."));
 
+export const toggleLoginOrSignup = () => {
   return {
-    type: UserActionTypes.UPDATE_PROFILE,
-    payload: request,
+    type: UserActionTypes.TOGGLE_LOGIN_OR_SIGNUP,
   };
 };

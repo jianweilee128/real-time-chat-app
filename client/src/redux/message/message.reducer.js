@@ -1,8 +1,9 @@
 import MessageActionTypes from "./message.types";
 
 const INITIAL_STATE = {
-  message: "",
+  loadingMessagesSuccess: true,
   messageList: [],
+  err: "",
 };
 
 const messageReducer = (state = INITIAL_STATE, action) => {
@@ -12,15 +13,17 @@ const messageReducer = (state = INITIAL_STATE, action) => {
         ...state,
         messageList: state.messageList.concat(action.payload),
       };
-    case MessageActionTypes.GET_MESSAGE_LIST:
+    case MessageActionTypes.FETCH_MESSAGES_SUCCESS:
       return {
         ...state,
+        loadingMessagesSuccess: true,
         messageList: action.payload,
       };
-    case MessageActionTypes.SET_MESSAGE_LIST:
+    case MessageActionTypes.FETCH_MESSAGES_FAILURE:
       return {
         ...state,
-        messageList: action.payload,
+        loadingMessagesSuccess: false,
+        err: action.payload,
       };
     default:
       return state;

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UpdateProfile component should render UpdateProfile component 1`] = `ShallowWrapper {}`;

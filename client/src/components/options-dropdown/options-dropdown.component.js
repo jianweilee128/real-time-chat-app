@@ -1,35 +1,27 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import "./options-dropdown.scss";
 import {
   setToggleDropdown,
   deleteRoom,
   setCurrentRoom,
 } from "../../redux/room/room.actions";
-import { logout, toggleIsAuthenticated } from "../../redux/user/user.actions";
+import { logout } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
 
 const OptionsDropdown = ({
   setToggleDropdown,
-  history,
   logout,
   currentRoom,
   socketRef,
   deleteRoom,
   setCurrentRoom,
-  toggleIsAuthenticated,
+  userInRoom,
 }) => {
   const handleLogout = () => {
-    logout().payload.then((res) => {
-      if (res.data.status === "success") {
-        toggleIsAuthenticated();
-        return history.push({
-          pathname: "/",
-        });
-      }
-    });
+    logout();
+    return <Redirect to="/" />;
   };
-
   const deleteRoomSocket = () => {
     socketRef.current.emit("room-delete", currentRoom[1]);
   };
@@ -40,17 +32,19 @@ const OptionsDropdown = ({
 
   return (
     <div className="nav-setting-dropdown-container">
-      <li
-        onClick={() => {
-          setToggleDropdown();
-          deleteRoom(currentRoom[1]);
-          deleteRoomSocket();
-          leaveRoom();
-          setCurrentRoom([]);
-        }}
-      >
-        delete room
-      </li>
+      {userInRoom ? (
+        <li
+          onClick={() => {
+            setToggleDropdown();
+            deleteRoom(currentRoom[1]);
+            deleteRoomSocket();
+            leaveRoom();
+            setCurrentRoom([]);
+          }}
+        >
+          delete room
+        </li>
+      ) : null}
       <li className="logout-button" onClick={() => handleLogout()}>
         logout
       </li>
@@ -63,15 +57,14 @@ const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(logout()),
   deleteRoom: (roomId) => dispatch(deleteRoom(roomId)),
   setCurrentRoom: (room) => dispatch(setCurrentRoom(room)),
-  toggleIsAuthenticated: () => dispatch(toggleIsAuthenticated()),
 });
 
 const mapStateToProps = (state) => {
   return {
     currentRoom: state.room.currentRoom,
+    userInRoom: state.room.userInRoom,
+    isAuthenticated: state.user.isAuthenticated,
   };
 };
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(OptionsDropdown)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(OptionsDropdown);

@@ -2,14 +2,20 @@ import React from "react";
 import "./auth-view.scss";
 import LoginForm from "../../components/login-form/login-form.component";
 import SignupForm from "../../components/signup-form/signup-form.component";
+import { connect } from "react-redux";
 
-const AuthView = () => {
+const AuthView = ({ loginOrSignup }) => {
   return (
     <div className="auth-view-container">
-      <LoginForm />
-      <SignupForm />
+      {loginOrSignup ? <SignupForm /> : <LoginForm />}
     </div>
   );
 };
 
-export default AuthView;
+const mapStateToProps = (state) => {
+  return {
+    loginOrSignup: state.user.loginOrSignup,
+  };
+};
+
+export default connect(mapStateToProps)(AuthView);

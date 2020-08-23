@@ -1,6 +1,9 @@
 import React from "react";
 import "./nav-room-card.scss";
-import { setCurrentRoom } from "../../redux/room/room.actions";
+import {
+  setCurrentRoom,
+  toggleUserInRoom,
+} from "../../redux/room/room.actions";
 
 import { connect } from "react-redux";
 
@@ -10,6 +13,7 @@ const NavRoomCard = ({
   currentRoom,
   setCurrentRoom,
   socketRef,
+  toggleUserInRoom,
 }) => {
   const joinRoom = () => {
     socketRef.current.emit("join-room", roomId);
@@ -25,6 +29,7 @@ const NavRoomCard = ({
         onClick={() => {
           leaveRoom();
           joinRoom();
+          toggleUserInRoom();
           setCurrentRoom([room, roomId]);
         }}
       >
@@ -36,6 +41,7 @@ const NavRoomCard = ({
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentRoom: (room) => dispatch(setCurrentRoom(room)),
+  toggleUserInRoom: () => dispatch(toggleUserInRoom()),
 });
 
 const mapStateToProps = (state) => {

@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import "./navigation-bar.scss";
 import NavRoomCard from "../nav-room-card/nav-room-card.component";
 import {
-  getRoomList,
-  setRoomList,
   setToggleOptionsPopup,
+  fetchRoomList,
 } from "../../redux/room/room.actions";
 import { connect } from "react-redux";
 import { ReactComponent as EditIcon } from "../../resources/img/edit.svg";
@@ -13,18 +12,15 @@ import { toggleUpdateProfile } from "../../redux/user/user.actions";
 
 const NavigationBar = ({
   user,
-  getRoomList,
-  setRoomList,
   roomList,
   currentRoom,
   setToggleOptionsPopup,
   socketRef,
+  fetchRoomList,
   toggleUpdateProfile,
 }) => {
   useEffect(() => {
-    getRoomList(user._id).payload.then((res) => {
-      setRoomList(res.rooms);
-    });
+    fetchRoomList(user._id);
   }, []); // eslint-disable-line
 
   return (
@@ -37,8 +33,8 @@ const NavigationBar = ({
           {currentRoom[0]
             ? `Currently in: ${currentRoom[0]}`
             : `Not in any room`}
-          <div className="edit-icon">
-            <EditIcon onClick={() => toggleUpdateProfile()} />
+          <div className="edit-icon" onClick={() => toggleUpdateProfile()}>
+            <EditIcon />
           </div>
         </span>
       </div>
@@ -47,8 +43,11 @@ const NavigationBar = ({
         <div className="nav-menu rooms">
           <span>rooms</span>
         </div>
-        <div className="nav-menu add-icon">
-          <AddIcon onClick={() => setToggleOptionsPopup()} />
+        <div
+          className="nav-menu add-icon"
+          onClick={() => setToggleOptionsPopup()}
+        >
+          <AddIcon />
         </div>
       </div>
       <div className="nav-menu-cards">
@@ -66,8 +65,7 @@ const NavigationBar = ({
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getRoomList: (userId) => dispatch(getRoomList(userId)),
-  setRoomList: (roomList) => dispatch(setRoomList(roomList)),
+  fetchRoomList: (userId) => dispatch(fetchRoomList(userId)),
   setToggleOptionsPopup: () => dispatch(setToggleOptionsPopup()),
   toggleUpdateProfile: () => dispatch(toggleUpdateProfile()),
 });

@@ -26,33 +26,35 @@ const OptionsPopup = ({ user, socketRef, setToggleOptionsPopup }) => {
   return (
     <div className="popup-container">
       <div className="popup-inner">
-        <CloseIcon
-          className="test-icon"
-          onClick={() => setToggleOptionsPopup()}
-        />
-        <div className="join-room-container">
+        <div className="close-icon" onClick={() => setToggleOptionsPopup()}>
+          <CloseIcon />
+        </div>
+        <div className="options-popup-container">
           <h2>join room</h2>
           <input
             placeholder="Enter room id to join..."
             type="text"
-            className="join-room-input"
+            className="options-popup-input"
             id="join-room-input"
             onChange={(e) => setJoinRoomId(e.target.value)}
           />
-          <div className="join-room-button" onClick={() => joinRoom()}>
+          <div className="options-popup-button" onClick={() => joinRoom()}>
             join room
           </div>
         </div>
-        <div className="create-room-container">
+        <div className="options-popup-container room-create">
           <h2>room create</h2>
           <input
             placeholder="Enter room name to create..."
             type="text"
-            className="create-room-input"
+            className="options-popup-input"
             id="create-room-input"
             onChange={(e) => setRoomName(e.target.value)}
           />
-          <div className="create-button" onClick={() => handleRoomCreate()}>
+          <div
+            className="options-popup-button"
+            onClick={() => handleRoomCreate()}
+          >
             create room
           </div>
         </div>

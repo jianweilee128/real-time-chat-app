@@ -1,31 +1,37 @@
 import MessageActionTypes from "./message.types";
 import axios from "axios";
 
-export const getMessageList = (room) => {
-  const request = axios({
-    method: "post",
-    url: "/api/v1/messages",
-    data: {
-      room: room,
-    },
-  })
-    .then((res) => res.data)
-    .catch(() => alert("Error in getting messages!"));
-
-  return {
-    type: MessageActionTypes.GET_MESSAGE_LIST,
-    payload: request,
+export const fetchMessages = (room) => {
+  return (dispatch) => {
+    axios({
+      method: "post",
+      url: "/api/v1/messages",
+      data: {
+        room: room,
+      },
+    })
+      .then((res) => {
+        const messages = res.data.messages;
+        dispatch(fetchMessagesSuccess(messages));
+      })
+      .catch((err) => dispatch(fetchMessagesFailure(err.message)));
   };
 };
-
-export const addMessageList = (messageItem) => ({
-  type: MessageActionTypes.ADD_MESSAGE_LIST,
-  payload: messageItem,
-});
-
-export const setMessageList = (messageList) => {
+export const fetchMessagesSuccess = (messages) => {
   return {
-    type: MessageActionTypes.SET_MESSAGE_LIST,
-    payload: messageList,
+    type: MessageActionTypes.FETCH_MESSAGES_SUCCESS,
+    payload: messages,
+  };
+};
+export const fetchMessagesFailure = (err) => {
+  return {
+    type: MessageActionTypes.FETCH_MESSAGES_FAILURE,
+    payload: err,
+  };
+};
+export const addMessageList = (messageItem) => {
+  return {
+    type: MessageActionTypes.ADD_MESSAGE_LIST,
+    payload: messageItem,
   };
 };

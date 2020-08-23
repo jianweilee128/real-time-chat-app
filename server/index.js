@@ -65,8 +65,6 @@ server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}...`);
 });
 
-const messageController = require("./controllers/messageController");
-const roomController = require("./controllers/roomController");
 const Room = require("./models/roomModel");
 const User = require("./models/userModel");
 const Message = require("./models/messageModel");
@@ -97,12 +95,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("room-create", async ({ name, userId }) => {
-    await Room.create({
+    const room = await Room.create({
       name: name,
       users: [userId],
     });
-    const res = await Room.find({ users: { $in: userId } });
-    return io.emit("room-create-success", res);
+    return io.emit("room-create-success", room);
   });
 
   socket.on("room-join", async ({ roomId, userId }) => {

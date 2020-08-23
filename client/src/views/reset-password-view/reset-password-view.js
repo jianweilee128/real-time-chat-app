@@ -4,28 +4,15 @@ import { resetPassword } from "../../redux/user/user.actions";
 import "./reset-password-view.scss";
 import { connect } from "react-redux";
 
-const ResetPasswordView = ({ match, resetPassword }) => {
+const ResetPasswordView = ({ match, resetPassword, resetPasswordSuccess }) => {
   const token = match.params.token;
-  const [resetPasswordSubmit, toggleResetPasswordSubmit] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [passwordConfirmInput, setPasswordConfirmInput] = useState("");
-
-  const handleResetSubmit = (passwordInput, passwordConfirmInput) => {
-    resetPassword(token, passwordInput, passwordConfirmInput).payload.then(
-      (res) => {
-        if (res.data && res.data.status === "success") {
-          toggleResetPasswordSubmit(true);
-        } else {
-          alert("Something happened. Please try again!");
-        }
-      }
-    );
-  };
 
   return (
     <div className="reset-password-view-container">
       <div className="reset-password-border">
-        {resetPasswordSubmit ? (
+        {resetPasswordSuccess ? (
           <div className="reset-received-container">
             <span className="reset-received-message">
               Your password has been changed.
@@ -61,7 +48,7 @@ const ResetPasswordView = ({ match, resetPassword }) => {
               <div
                 className="reset-password-btn"
                 onClick={() =>
-                  handleResetSubmit(passwordInput, passwordConfirmInput)
+                  resetPassword(token, passwordInput, passwordConfirmInput)
                 }
               >
                 reset password
@@ -79,4 +66,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(resetPassword(token, newPassword, newPasswordConfirm)),
 });
 
-export default connect(null, mapDispatchToProps)(ResetPasswordView);
+const mapStateToProps = (state) => {
+  return {
+    resetPasswordSuccess: state.user.resetPasswordSuccess,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPasswordView);

@@ -4,24 +4,13 @@ import "./forgot-password-view.scss";
 import { connect } from "react-redux";
 import { forgotPassword } from "../../redux/user/user.actions";
 
-const ForgotPasswordView = ({ forgotPassword }) => {
-  const [forgotPasswordSubmit, toggleForgotPasswordSubmit] = useState(false);
+const ForgotPasswordView = ({ forgotPassword, forgotPasswordSuccess }) => {
   const [emailInput, setEmailInput] = useState("");
-
-  const handleForgotSubmit = (email) => {
-    forgotPassword(email).payload.then((res) => {
-      if (res.data && res.data.status === "success") {
-        toggleForgotPasswordSubmit(true);
-      } else {
-        alert("Something happened. Please try again!");
-      }
-    });
-  };
-
+  console.log(forgotPasswordSuccess);
   return (
     <div className="forgot-password-view-container">
       <div className="forgot-password-border">
-        {forgotPasswordSubmit ? (
+        {forgotPasswordSuccess ? (
           <div className="forgot-received-container">
             <span className="forgot-received-message">
               We have received your request to reset your password. <br />
@@ -51,7 +40,7 @@ const ForgotPasswordView = ({ forgotPassword }) => {
               </div>
               <div
                 className="forgot-password-btn"
-                onClick={() => handleForgotSubmit(emailInput)}
+                onClick={() => forgotPassword(emailInput)}
               >
                 send
               </div>
@@ -67,4 +56,10 @@ const mapDispatchToProps = (dispatch) => ({
   forgotPassword: (email) => dispatch(forgotPassword(email)),
 });
 
-export default connect(null, mapDispatchToProps)(ForgotPasswordView);
+const mapStateToProps = (state) => {
+  return {
+    forgotPasswordSuccess: state.user.forgotPasswordSuccess,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPasswordView);

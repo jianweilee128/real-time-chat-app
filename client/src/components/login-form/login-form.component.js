@@ -1,72 +1,71 @@
 import React, { useState } from "react";
-import { withRouter, Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import "./login-form.scss";
-import {
-  login,
-  setCurrentUser,
-  toggleIsAuthenticated,
-} from "../../redux/user/user.actions";
+import { login, toggleLoginOrSignup } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
 
-const LoginForm = ({
-  history,
-  login,
-  setCurrentUser,
-  toggleIsAuthenticated,
-}) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm = ({ login, toggleLoginOrSignup, isAuthenticated }) => {
+  const [formData, setFormData] = useState({});
 
-  function handleLogin() {
-    login(email, password).payload.then((data) => {
-      if (data && data.status === "success") {
-        setCurrentUser(data.user);
-        toggleIsAuthenticated();
-        return history.push({
-          pathname: "/chat",
-        });
-      }
-      return;
-    });
-  }
-
+  const handleLogin = () => {
+    login(formData.email, formData.password);
+  };
   return (
-    <div className="login-form">
-      <h1>Login</h1>
-      <div className="form-item">
-        <label className="form-label">Email</label>
-        <input
-          type="text"
-          className="login-input"
-          name="email"
-          placeholder="Enter your email..."
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div className="form-item">
-        <label className="form-label">Password</label>
-        <input
-          type="password"
-          className="login-input"
-          name="password"
-          placeholder="Enter your password..."
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <Link to="/forgotPassword" className="forgot-password-button">
-        Forgot Password?
-      </Link>
-      <div className="login-btn" onClick={() => handleLogin()}>
-        login
-      </div>
-    </div>
+    <React.Fragment>
+      {isAuthenticated ? (
+        <Redirect to="/chat" />
+      ) : (
+        <div className="login-form">
+          <div className="form-options">
+            <h1>login</h1>
+            <h1 className="signup" onClick={() => toggleLoginOrSignup()}>
+              signup
+            </h1>
+          </div>
+          <div className="form-item">
+            <label className="form-label">Email</label>
+            <input
+              type="text"
+              className="login-input"
+              name="email"
+              placeholder="Enter your email..."
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+            />
+          </div>
+          <div className="form-item">
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              className="login-input"
+              name="password"
+              placeholder="Enter your password..."
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+            />
+          </div>
+          <Link to="/forgotPassword" className="forgot-password-button">
+            Forgot Password?
+          </Link>
+          <div className="login-btn" onClick={() => handleLogin()}>
+            login
+          </div>
+        </div>
+      )}
+    </React.Fragment>
   );
 };
 
 const mapDispatchToProps = (dispatch) => ({
   login: (email, password) => dispatch(login(email, password)),
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-  toggleIsAuthenticated: () => dispatch(toggleIsAuthenticated()),
+  toggleLoginOrSignup: () => dispatch(toggleLoginOrSignup()),
 });
 
-export default withRouter(connect(null, mapDispatchToProps)(LoginForm));
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.user.isAuthenticated,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

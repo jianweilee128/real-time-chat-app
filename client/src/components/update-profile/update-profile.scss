@@ -1,4 +1,4 @@
-.update-profile-view-container {
+.update-profile-container {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -12,28 +12,38 @@
 
   h1 {
     text-transform: capitalize;
-    text-align: center;
+    text-align: left;
+    font-weight: lighter;
+    margin: 0 5rem;
   }
 
   span {
     font-weight: bold;
   }
 
+  .test-icon {
+    margin: 1rem 1rem 0;
+    display: flex;
+    cursor: pointer;
+    width: 2rem;
+  }
+
   .update-profile-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    padding: 20px 0;
+    margin: 0 5rem;
 
     .update-profile-subtitle {
       text-transform: capitalize;
+      text-align: left;
+      margin-top: 2rem;
     }
 
     .form-item {
       display: flex;
       flex-direction: column;
-      width: 50%;
+      width: 100%;
       margin: 20px 0;
       .form-label {
         margin: 10px 0;
@@ -49,7 +59,7 @@
     }
     .update-profile-btn {
       text-decoration: none;
-      width: 20%;
+      width: 30%;
       height: 50px;
       letter-spacing: 0.5px;
       line-height: 50px;
@@ -60,9 +70,9 @@
       font-family: "Source Sans Pro";
       font-weight: bolder;
       cursor: pointer;
-      display: flex;
-      justify-content: center;
-      margin: 1rem 0;
+      margin: 2rem 0;
+      margin-right: 0;
+      margin-left: auto;
 
       background-color: black;
       color: white;

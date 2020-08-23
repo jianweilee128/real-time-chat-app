@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignupForm component should render SignupForm component 1`] = `ShallowWrapper {}`;
