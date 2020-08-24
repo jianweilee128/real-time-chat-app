@@ -9,6 +9,10 @@
   color: black;
   border: none;
   font-weight: bolder;
+  @media only screen and (max-width: 480px) {
+    font-size: 0.7rem;
+    width: 80vw;
+  }
 
   .form-options {
     display: flex;

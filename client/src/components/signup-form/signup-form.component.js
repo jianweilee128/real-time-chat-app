@@ -1,20 +1,27 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import "./signup-form.scss";
 import { Redirect } from "react-router-dom";
 import { signup, toggleLoginOrSignup } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
 
 const SignupForm = ({ signup, toggleLoginOrSignup, isAuthenticated }) => {
-  const [formData, setFormData] = useState({});
+  const nameInputRef = useRef();
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+  const confirmPasswordInputRef = useRef();
 
   const handleSignup = () => {
-    signup(
-      formData.name,
-      formData.email,
-      formData.password,
-      formData.passwordConfirm
-    );
+    let nameInput = nameInputRef.current.value;
+    let emailInput = emailInputRef.current.value;
+    let passwordInput = passwordInputRef.current.value;
+    let confirmPasswordInput = confirmPasswordInputRef.current.value;
+    signup(nameInput, emailInput, passwordInput, confirmPasswordInput);
+    nameInput = "";
+    emailInput = "";
+    passwordInput = "";
+    confirmPasswordInput = "";
   };
+
   return (
     <React.Fragment>
       {isAuthenticated ? (
@@ -30,49 +37,41 @@ const SignupForm = ({ signup, toggleLoginOrSignup, isAuthenticated }) => {
           <div className="form-item">
             <label className="form-label">Name</label>
             <input
+              ref={nameInputRef}
               type="text"
               className="signup-input"
               name="name"
               placeholder="Enter your name..."
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
             />
           </div>
           <div className="form-item">
             <label className="form-label">Email</label>
             <input
+              ref={emailInputRef}
               type="text"
               className="signup-input"
               name="email"
               placeholder="Enter your email..."
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
             />
           </div>
           <div className="form-item">
             <label className="form-label">Password</label>
             <input
+              ref={passwordInputRef}
               type="password"
               className="signup-input"
               name="password"
               placeholder="Enter your password..."
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
             />
           </div>
           <div className="form-item">
             <label className="form-label">Confirm Password</label>
             <input
+              ref={confirmPasswordInputRef}
               type="password"
               className="signup-input"
               name="confirm-password"
               placeholder="Enter your password again..."
-              onChange={(e) =>
-                setFormData({ ...formData, passwordConfirm: e.target.value })
-              }
             />
           </div>
           <div className="signup-btn" onClick={() => handleSignup()}>

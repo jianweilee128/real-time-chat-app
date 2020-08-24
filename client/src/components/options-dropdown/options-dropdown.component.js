@@ -5,6 +5,7 @@ import {
   setToggleDropdown,
   deleteRoom,
   setCurrentRoom,
+  toggleUserInRoom,
 } from "../../redux/room/room.actions";
 import { logout } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
@@ -17,6 +18,7 @@ const OptionsDropdown = ({
   deleteRoom,
   setCurrentRoom,
   userInRoom,
+  toggleUserInRoom,
 }) => {
   const handleLogout = () => {
     logout();
@@ -24,10 +26,8 @@ const OptionsDropdown = ({
   };
   const deleteRoomSocket = () => {
     socketRef.current.emit("room-delete", currentRoom[1]);
-  };
-
-  const leaveRoom = () => {
     socketRef.current.emit("leave-room", currentRoom[1]);
+    toggleUserInRoom();
   };
 
   return (
@@ -38,7 +38,6 @@ const OptionsDropdown = ({
             setToggleDropdown();
             deleteRoom(currentRoom[1]);
             deleteRoomSocket();
-            leaveRoom();
             setCurrentRoom([]);
           }}
         >
@@ -57,6 +56,7 @@ const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(logout()),
   deleteRoom: (roomId) => dispatch(deleteRoom(roomId)),
   setCurrentRoom: (room) => dispatch(setCurrentRoom(room)),
+  toggleUserInRoom: () => dispatch(toggleUserInRoom()),
 });
 
 const mapStateToProps = (state) => {

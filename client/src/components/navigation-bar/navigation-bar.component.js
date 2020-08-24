@@ -28,7 +28,6 @@ const NavigationBar = ({
       {/* Nav Profile */}
       <div className="nav-profile-container">
         <h5>{user.name}</h5>
-        <h6>{`ID:${user._id}`}</h6>
         <span className="nav-profile-room">
           {currentRoom[0]
             ? `Currently in: ${currentRoom[0]}`

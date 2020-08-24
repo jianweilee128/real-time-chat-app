@@ -4,6 +4,15 @@
   height: 100%;
   margin: 0 1rem;
   overflow: hidden;
+
+  @media only screen and (max-width: 768px) {
+    margin: 0;
+    font-size: 0.8rem;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 0.7rem;
+  }
+
   .nav-profile-container {
     text-align: left;
     border-bottom: 1px solid grey;
@@ -14,11 +23,7 @@
 
     h5 {
       text-transform: capitalize;
-      margin: 0;
-    }
-
-    h6 {
-      margin: 0.5rem 0;
+      margin: 0.7rem 0;
     }
 
     .nav-profile-room {
@@ -80,6 +85,10 @@
       width: 20%;
       cursor: pointer;
       height: 2.5rem;
+
+      @media only screen and (max-width: 480px) {
+        width: 30%;
+      }
     }
   }
 

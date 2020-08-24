@@ -8,6 +8,7 @@ const INITIAL_STATE = {
   toggleOptionsPopup: false,
   userInRoom: false,
   err: "",
+  sideMenuOpen: true,
 };
 
 const roomReducer = (state = INITIAL_STATE, action) => {
@@ -52,7 +53,12 @@ const roomReducer = (state = INITIAL_STATE, action) => {
     case RoomActionTypes.TOGGLE_USER_IN_ROOM:
       return {
         ...state,
-        userInRoom: true,
+        userInRoom: !state.userInRoom,
+      };
+    case RoomActionTypes.TOGGLE_SIDE_MENU:
+      return {
+        ...state,
+        sideMenuOpen: !state.sideMenuOpen,
       };
     default:
       return state;

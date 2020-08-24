@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "./chat-view.scss";
 import NavigationBar from "../../components/navigation-bar/navigation-bar.component";
 import ChatCard from "../../components/chat-card/chat-card.component";
@@ -8,29 +8,31 @@ import {
   addMessageList,
   fetchMessages,
 } from "../../redux/message/message.actions";
-import { addRoomList } from "../../redux/room/room.actions";
+import { addRoomList, toggleSideMenu } from "../../redux/room/room.actions";
 import { setToggleDropdown } from "../../redux/room/room.actions";
 import OptionsDropdown from "../../components/options-dropdown/options-dropdown.component";
 import { ReactComponent as SettingsIcon } from "../../resources/img/settings.svg";
+import { ReactComponent as MenuIcon } from "../../resources/img/menu.svg";
 import { connect } from "react-redux";
 import io from "socket.io-client";
 
 const ChatView = ({
   user,
   messageList,
-  setMessageList,
   addMessageList,
   currentRoom,
   toggleOptionsPopup,
   setToggleDropdown,
   toggleDropdown,
+  toggleSideMenu,
   isUpdateProfile,
+  sideMenuOpen,
   addRoomList,
   userInRoom,
   fetchMessages,
 }) => {
-  const [message, setMessage] = useState("");
   const server = "http://localhost:5000/";
+  const messageRef = useRef();
   const socketRef = useRef();
   const endRef = useRef(null);
 
@@ -62,23 +64,26 @@ const ChatView = ({
     fetchMessages(currentRoom[1]);
   }, [currentRoom, fetchMessages]);
 
-  const handleInputSubmit = (e) => {
-    e.preventDefault();
+  const handleInputSubmit = () => {
+    let message = messageRef.current.value;
     socketRef.current.emit("input-message-emit", {
       message: message,
       sender: user._id,
       room: currentRoom[1],
     });
-    document.getElementById("chatroom-text-input").value = "";
+    message = "";
   };
 
   return (
     <div className="chat-view-container">
-      <div className="left-view-container">
-        <NavigationBar socketRef={socketRef} />
-      </div>
+      {sideMenuOpen ? (
+        <div className="left-view-container">
+          <NavigationBar socketRef={socketRef} />
+        </div>
+      ) : null}
       <div className="right-view-container">
         <div className="chatroom-options">
+          <MenuIcon className="menu-icon" onClick={() => toggleSideMenu()} />
           {userInRoom ? (
             <React.Fragment>
               <h5>{currentRoom[0]}</h5>
@@ -108,19 +113,19 @@ const ChatView = ({
             {userInRoom ? (
               <div className="chatroom-input">
                 <input
+                  ref={messageRef}
                   type="text"
                   className="chatroom-text-input"
                   id="chatroom-text-input"
                   name="chatroom-text-input"
                   placeholder="Write your message..."
-                  onChange={(e) => setMessage(e.target.value)}
                 />
-                <button
+                <div
                   className="submit-button"
-                  onClick={(e) => handleInputSubmit(e)}
+                  onClick={() => handleInputSubmit()}
                 >
                   Submit
-                </button>
+                </div>
               </div>
             ) : null}
           </React.Fragment>
@@ -136,6 +141,7 @@ const mapDispatchToProps = (dispatch) => ({
   addMessageList: (messageItem) => dispatch(addMessageList(messageItem)),
   setToggleDropdown: () => dispatch(setToggleDropdown()),
   addRoomList: (roomToJoin) => dispatch(addRoomList(roomToJoin)),
+  toggleSideMenu: () => dispatch(toggleSideMenu()),
 });
 
 const mapStateToProps = (state) => {
@@ -147,6 +153,7 @@ const mapStateToProps = (state) => {
     toggleOptionsPopup: state.room.toggleOptionsPopup,
     isUpdateProfile: state.user.isUpdateProfile,
     userInRoom: state.room.userInRoom,
+    sideMenuOpen: state.room.sideMenuOpen,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ChatView);

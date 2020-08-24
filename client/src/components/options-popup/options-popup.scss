@@ -16,8 +16,25 @@
   top: 25%;
   bottom: 25%;
   margin: auto;
-  border-radius: 1rem;
+  border-radius: 0.8rem;
   background: white;
+
+  @media only screen and (max-width: 768px) {
+    left: 20%;
+    right: 20%;
+    top: 20%;
+    bottom: 20%;
+    font-size: 0.7rem;
+  }
+  @media only screen and (max-width: 480px) {
+    left: 10%;
+    right: 10%;
+    top: 10%;
+    bottom: 25%;
+    border-radius: 0;
+    margin: 0;
+    font-size: 0.7rem;
+  }
 
   .close-icon {
     margin: 1rem 1rem 0;
@@ -38,13 +55,17 @@
     letter-spacing: 0.5px;
     padding: 1rem;
     box-sizing: border-box;
-    font-size: 15px;
+    font-size: 1rem;
     text-transform: uppercase;
     font-family: "Source Sans Pro";
     font-weight: bolder;
     border: none;
     width: 50%;
     cursor: pointer;
+    @media only screen and (max-width: 480px) {
+      font-size: 0.7rem;
+      padding: 0.8rem;
+    }
 
     background-color: black;
     color: white;
@@ -70,11 +91,15 @@
     width: 50%;
     border: 1px solid black;
     opacity: 0.7;
-    padding: 20px;
+    padding: 1rem;
     box-sizing: border-box;
     color: black;
     outline: none;
     font-size: 0.8rem;
     margin-bottom: 1rem;
+    @media only screen and (max-width: 480px) {
+      font-size: 0.6rem;
+      padding: 0.8rem;
+    }
   }
 }

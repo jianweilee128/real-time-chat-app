@@ -4,12 +4,25 @@
   height: 100vh;
   width: 100vw;
 
+  @media only screen and (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 0.7rem;
+  }
+
   .left-view-container {
-    width: 20%;
+    width: 30%;
+    @media only screen and (max-width: 768px) {
+      width: 100%;
+    }
+    @media only screen and (max-width: 768px) {
+      width: 100%;
+    }
   }
 
   .right-view-container {
-    width: 80%;
+    width: stretch;
     border: 1px solid black;
     display: flex;
     flex-direction: column;
@@ -24,7 +37,19 @@
       border-bottom: 1px solid black;
 
       h5 {
-        margin: 0 0.5rem;
+        margin: 0 2rem;
+        @media only screen and (max-width: 768px) {
+          margin: 0.7rem;
+          font-size: 0.5rem;
+        }
+        @media only screen and (max-width: 480px) {
+          margin: 0.5rem;
+        }
+      }
+
+      .menu-icon {
+        height: 1rem;
+        cursor: pointer;
       }
 
       .settings-icon {
@@ -68,11 +93,16 @@
         letter-spacing: 0.5px;
         padding: 1rem;
         box-sizing: border-box;
-        font-size: 15px;
+        font-size: 1rem;
         text-transform: uppercase;
         font-family: "Source Sans Pro";
         font-weight: bolder;
         border: none;
+
+        @media only screen and (max-width: 480px) {
+          font-size: 0.7rem;
+          padding: 0.5rem;
+        }
 
         cursor: pointer;
         display: flex;

@@ -17,9 +17,13 @@ const NavRoomCard = ({
 }) => {
   const joinRoom = () => {
     socketRef.current.emit("join-room", roomId);
+    toggleUserInRoom();
   };
   const leaveRoom = () => {
-    socketRef.current.emit("leave-room", currentRoom[1]);
+    if (currentRoom[1]) {
+      socketRef.current.emit("leave-room", currentRoom[1]);
+      toggleUserInRoom();
+    }
   };
 
   return (
@@ -29,7 +33,6 @@ const NavRoomCard = ({
         onClick={() => {
           leaveRoom();
           joinRoom();
-          toggleUserInRoom();
           setCurrentRoom([room, roomId]);
         }}
       >

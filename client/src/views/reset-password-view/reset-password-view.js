@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { resetPassword } from "../../redux/user/user.actions";
 import "./reset-password-view.scss";
@@ -6,8 +6,16 @@ import { connect } from "react-redux";
 
 const ResetPasswordView = ({ match, resetPassword, resetPasswordSuccess }) => {
   const token = match.params.token;
-  const [passwordInput, setPasswordInput] = useState("");
-  const [passwordConfirmInput, setPasswordConfirmInput] = useState("");
+  const passwordInputRef = useRef();
+  const confirmPasswordInputRef = useRef();
+
+  const handleSubmit = () => {
+    let passwordInput = passwordInputRef.current.value;
+    let confirmPasswordInput = confirmPasswordInputRef.current.value;
+    resetPassword(token, passwordInput, confirmPasswordInput);
+    passwordInput = "";
+    confirmPasswordInput = "";
+  };
 
   return (
     <div className="reset-password-view-container">
@@ -28,28 +36,26 @@ const ResetPasswordView = ({ match, resetPassword, resetPasswordSuccess }) => {
               <div className="form-item">
                 <label className="form-label">new password</label>
                 <input
+                  ref={passwordInputRef}
                   type="password"
                   className="password-input"
                   name="password"
                   placeholder="Enter your password..."
-                  onChange={(e) => setPasswordInput(e.target.value)}
                 />
               </div>
               <div className="form-item">
                 <label className="form-label">new password confirm</label>
                 <input
+                  ref={confirmPasswordInputRef}
                   type="password"
                   className="password-input"
                   name="password"
                   placeholder="Enter your password again..."
-                  onChange={(e) => setPasswordConfirmInput(e.target.value)}
                 />
               </div>
               <div
                 className="reset-password-btn"
-                onClick={() =>
-                  resetPassword(token, passwordInput, passwordConfirmInput)
-                }
+                onClick={() => handleSubmit()}
               >
                 reset password
               </div>

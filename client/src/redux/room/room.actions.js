@@ -62,3 +62,8 @@ export const toggleUserInRoom = () => {
     type: RoomActionTypes.TOGGLE_USER_IN_ROOM,
   };
 };
+export const toggleSideMenu = () => {
+  return {
+    type: RoomActionTypes.TOGGLE_SIDE_MENU,
+  };
+};

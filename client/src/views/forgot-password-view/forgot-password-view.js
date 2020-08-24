@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import "./forgot-password-view.scss";
 import { connect } from "react-redux";
 import { forgotPassword } from "../../redux/user/user.actions";
 
 const ForgotPasswordView = ({ forgotPassword, forgotPasswordSuccess }) => {
-  const [emailInput, setEmailInput] = useState("");
-  console.log(forgotPasswordSuccess);
+  const emailInputRef = useRef();
+  const handleSubmit = () => {
+    let emailInput = emailInputRef.current.value;
+    forgotPassword(emailInput);
+    emailInput = "";
+  };
   return (
     <div className="forgot-password-view-container">
       <div className="forgot-password-border">
@@ -31,16 +35,16 @@ const ForgotPasswordView = ({ forgotPassword, forgotPasswordSuccess }) => {
               <div className="form-item">
                 <label className="form-label">Email</label>
                 <input
+                  ref={emailInputRef}
                   type="text"
                   className="email-input"
                   name="email"
                   placeholder="Enter your email address..."
-                  onChange={(e) => setEmailInput(e.target.value)}
                 />
               </div>
               <div
                 className="forgot-password-btn"
-                onClick={() => forgotPassword(emailInput)}
+                onClick={() => handleSubmit()}
               >
                 send
               </div>
@@ -61,5 +65,4 @@ const mapStateToProps = (state) => {
     forgotPasswordSuccess: state.user.forgotPasswordSuccess,
   };
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPasswordView);

@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { connect } from "react-redux";
 import { ReactComponent as CloseIcon } from "../../resources/img/close.svg";
 import { setToggleOptionsPopup } from "../../redux/room/room.actions";
 import "./options-popup.scss";
 
 const OptionsPopup = ({ user, socketRef, setToggleOptionsPopup }) => {
-  const [roomName, setRoomName] = useState("");
-  const [joinRoomId, setJoinRoomId] = useState("");
+  const roomNameRef = useRef();
+  const joinRoomIdRef = useRef();
+
   const handleRoomCreate = () => {
+    let roomName = roomNameRef.current.value;
     socketRef.current.emit("room-create", {
       name: roomName,
       userId: user._id,
     });
-    document.getElementById("create-room-input").value = "";
+    roomName = "";
   };
 
   const joinRoom = () => {
+    let joinRoomId = joinRoomIdRef.current.value;
     socketRef.current.emit("room-join", {
       roomId: joinRoomId,
       userId: user._id,
     });
-    document.getElementById("join-room-input").value = "";
+    joinRoomId = "";
   };
 
   return (
@@ -32,11 +35,11 @@ const OptionsPopup = ({ user, socketRef, setToggleOptionsPopup }) => {
         <div className="options-popup-container">
           <h2>join room</h2>
           <input
+            ref={joinRoomIdRef}
             placeholder="Enter room id to join..."
             type="text"
             className="options-popup-input"
             id="join-room-input"
-            onChange={(e) => setJoinRoomId(e.target.value)}
           />
           <div className="options-popup-button" onClick={() => joinRoom()}>
             join room
@@ -45,11 +48,11 @@ const OptionsPopup = ({ user, socketRef, setToggleOptionsPopup }) => {
         <div className="options-popup-container room-create">
           <h2>room create</h2>
           <input
+            ref={roomNameRef}
             placeholder="Enter room name to create..."
             type="text"
             className="options-popup-input"
             id="create-room-input"
-            onChange={(e) => setRoomName(e.target.value)}
           />
           <div
             className="options-popup-button"

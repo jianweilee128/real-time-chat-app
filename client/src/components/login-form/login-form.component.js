@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { Link, Redirect } from "react-router-dom";
 import "./login-form.scss";
 import { login, toggleLoginOrSignup } from "../../redux/user/user.actions";
 import { connect } from "react-redux";
 
 const LoginForm = ({ login, toggleLoginOrSignup, isAuthenticated }) => {
-  const [formData, setFormData] = useState({});
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
 
   const handleLogin = () => {
-    login(formData.email, formData.password);
+    let emailInput = emailInputRef.current.value;
+    let passwordInput = passwordInputRef.current.value;
+    login(emailInput, passwordInput);
+    emailInput = "";
+    passwordInput = "";
   };
   return (
     <React.Fragment>
@@ -25,25 +30,21 @@ const LoginForm = ({ login, toggleLoginOrSignup, isAuthenticated }) => {
           <div className="form-item">
             <label className="form-label">Email</label>
             <input
+              ref={emailInputRef}
               type="text"
               className="login-input"
               name="email"
               placeholder="Enter your email..."
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
             />
           </div>
           <div className="form-item">
             <label className="form-label">Password</label>
             <input
+              ref={passwordInputRef}
               type="password"
               className="login-input"
               name="password"
               placeholder="Enter your password..."
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
             />
           </div>
           <Link to="/forgotPassword" className="forgot-password-button">

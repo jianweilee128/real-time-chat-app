@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { ReactComponent as CloseIcon } from "../../resources/img/close.svg";
 import {
   updatePassword,
@@ -14,11 +14,19 @@ const UpdateProfile = ({
   updateProfile,
   toggleUpdateProfile,
 }) => {
-  const [nameInput, setNameInput] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
+  const nameRef = useRef("");
+  const currentPasswordRef = useRef("");
+  const newPasswordRef = useRef("");
+  const confirmPasswordRef = useRef("");
+  const handleUpdatePassword = () => {
+    let currentPassword = currentPasswordRef.current.value;
+    let newPassword = newPasswordRef.current.value;
+    let confirmPassword = confirmPasswordRef.current.value;
+    updatePassword(currentPassword, newPassword, confirmPassword);
+    currentPassword = "";
+    newPassword = "";
+    confirmPassword = "";
+  };
   return (
     <div className="update-profile-container">
       <div className="test-icon">
@@ -30,17 +38,17 @@ const UpdateProfile = ({
         <div className="form-item">
           <label className="form-label">name</label>
           <input
+            ref={nameRef}
             type="text"
             className="input-box"
             name="name"
             placeholder="Enter your name..."
             defaultValue={user.name}
-            onChange={(e) => setNameInput(e.target.value)}
           />
         </div>
         <div
           className="update-profile-btn"
-          onClick={() => updateProfile(nameInput)}
+          onClick={() => updateProfile(nameRef.current.value)}
         >
           update profile
         </div>
@@ -49,35 +57,33 @@ const UpdateProfile = ({
         <div className="form-item">
           <label className="form-label">current password</label>
           <input
+            ref={currentPasswordRef}
             type="password"
             className="input-box"
             name="current-password"
-            onChange={(e) => setCurrentPassword(e.target.value)}
           />
         </div>
         <div className="form-item">
           <label className="form-label">new password</label>
           <input
+            ref={newPasswordRef}
             type="password"
             className="input-box"
             name="password"
-            onChange={(e) => setNewPassword(e.target.value)}
           />
         </div>
         <div className="form-item">
           <label className="form-label">confirm new password</label>
           <input
+            ref={confirmPasswordRef}
             type="password"
             className="input-box"
             name="password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
         <div
           className="update-profile-btn"
-          onClick={() =>
-            updatePassword(currentPassword, newPassword, confirmPassword)
-          }
+          onClick={() => handleUpdatePassword()}
         >
           update password
         </div>
