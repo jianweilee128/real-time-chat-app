@@ -40,8 +40,10 @@ app.use(express.static(path.join(__dirname, "../client/public")));
 
 // Serving static files if in production
 if (process.env.NODE_ENV === "production") {
+  // Set the static folder where all css and js file will be read from
   app.use(express.static(path.join(__dirname, "../client/build")));
 
+  // index.html to be serve for all page routes
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname + "/client/build/index.html"));
   });
@@ -91,6 +93,7 @@ io.on("connection", (socket) => {
     });
     const res = await Message.findById(newMessage._id);
     // Return message from server to client and to specific room
+    console.log(res);
     return io.to(res.room._id).emit("input-message-receive", res);
   });
 
@@ -104,8 +107,16 @@ io.on("connection", (socket) => {
 
   socket.on("room-join", async ({ roomId, userId }) => {
     const room = await Room.findById(roomId).select("+users");
-    room.users.push(userId);
-    room.save();
+    let userInRoom = false;
+    room.users.map((user) => {
+      if (userId == user) {
+        userInRoom = true;
+      }
+    });
+    if (!userInRoom) {
+      room.users.push(userId);
+      room.save();
+    }
     return io.emit("room-join-success", room);
   });
 
