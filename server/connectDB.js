@@ -9,7 +9,7 @@ const DB = process.env.DATABASE.replace("<password>", process.env.DB_PASSWORD);
 const connectDB = async () => {
   try {
     await mongoose
-      .connect(DB, {
+      .connect(process.env.DATABASE_URI || DB, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
