@@ -4,12 +4,15 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./.env" });
 
 // Configuration and connection to MongoDB
-const DB = process.env.DATABASE.replace("<password>", process.env.DB_PASSWORD);
+const DB = process.env.DATABASE_URI.replace(
+  "<password>",
+  process.env.DB_PASSWORD
+);
 
 const connectDB = async () => {
   try {
     await mongoose
-      .connect(process.env.DATABASE_URI || DB, {
+      .connect(process.env.MONGODB_URI || DB, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,

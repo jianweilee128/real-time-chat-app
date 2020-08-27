@@ -48,7 +48,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname + "/client/build/index.html"));
   });
 }
-
+console.log(path.join(__dirname, "../client/build"));
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/rooms", roomRouter);
