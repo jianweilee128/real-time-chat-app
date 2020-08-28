@@ -10,11 +10,13 @@ const ResetPasswordView = ({ match, resetPassword, resetPasswordSuccess }) => {
   const confirmPasswordInputRef = useRef();
 
   const handleSubmit = () => {
-    let passwordInput = passwordInputRef.current.value;
-    let confirmPasswordInput = confirmPasswordInputRef.current.value;
-    resetPassword(token, passwordInput, confirmPasswordInput);
-    passwordInput = "";
-    confirmPasswordInput = "";
+    resetPassword(
+      token,
+      passwordInputRef.current.value,
+      confirmPasswordInputRef.current.value
+    );
+    passwordInputRef.current.value = "";
+    confirmPasswordInputRef.current.value = "";
   };
 
   return (

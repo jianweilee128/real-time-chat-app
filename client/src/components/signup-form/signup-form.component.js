@@ -11,15 +11,16 @@ const SignupForm = ({ signup, toggleLoginOrSignup, isAuthenticated }) => {
   const confirmPasswordInputRef = useRef();
 
   const handleSignup = () => {
-    let nameInput = nameInputRef.current.value;
-    let emailInput = emailInputRef.current.value;
-    let passwordInput = passwordInputRef.current.value;
-    let confirmPasswordInput = confirmPasswordInputRef.current.value;
-    signup(nameInput, emailInput, passwordInput, confirmPasswordInput);
-    nameInput = "";
-    emailInput = "";
-    passwordInput = "";
-    confirmPasswordInput = "";
+    signup(
+      nameInputRef.current.value,
+      emailInputRef.current.value,
+      passwordInputRef.current.value,
+      confirmPasswordInputRef.current.value
+    );
+    nameInputRef.current.value = "";
+    emailInputRef.current.value = "";
+    passwordInputRef.current.value = "";
+    confirmPasswordInputRef.current.value = "";
   };
 
   return (

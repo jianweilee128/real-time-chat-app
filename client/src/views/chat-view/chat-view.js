@@ -65,13 +65,12 @@ const ChatView = ({
   }, [currentRoom, fetchMessages]);
 
   const handleInputSubmit = () => {
-    let message = messageRef.current.value;
     socketRef.current.emit("input-message-emit", {
-      message: message,
+      message: messageRef.current.value,
       sender: user._id,
       room: currentRoom[1],
     });
-    message = "";
+    messageRef.current.value = "";
   };
 
   return (

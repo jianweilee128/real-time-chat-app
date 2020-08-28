@@ -7,9 +7,8 @@ import { forgotPassword } from "../../redux/user/user.actions";
 const ForgotPasswordView = ({ forgotPassword, forgotPasswordSuccess }) => {
   const emailInputRef = useRef();
   const handleSubmit = () => {
-    let emailInput = emailInputRef.current.value;
-    forgotPassword(emailInput);
-    emailInput = "";
+    forgotPassword(emailInputRef.current.value);
+    emailInputRef.current.value = "";
   };
   return (
     <div className="forgot-password-view-container">

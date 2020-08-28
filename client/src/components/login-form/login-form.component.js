@@ -9,11 +9,9 @@ const LoginForm = ({ login, toggleLoginOrSignup, isAuthenticated }) => {
   const passwordInputRef = useRef();
 
   const handleLogin = () => {
-    let emailInput = emailInputRef.current.value;
-    let passwordInput = passwordInputRef.current.value;
-    login(emailInput, passwordInput);
-    emailInput = "";
-    passwordInput = "";
+    login(emailInputRef.current.value, passwordInputRef.current.value);
+    emailInputRef.current.value = "";
+    passwordInputRef.current.value = "";
   };
   return (
     <React.Fragment>

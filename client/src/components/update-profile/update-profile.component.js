@@ -19,13 +19,14 @@ const UpdateProfile = ({
   const newPasswordRef = useRef("");
   const confirmPasswordRef = useRef("");
   const handleUpdatePassword = () => {
-    let currentPassword = currentPasswordRef.current.value;
-    let newPassword = newPasswordRef.current.value;
-    let confirmPassword = confirmPasswordRef.current.value;
-    updatePassword(currentPassword, newPassword, confirmPassword);
-    currentPassword = "";
-    newPassword = "";
-    confirmPassword = "";
+    updatePassword(
+      currentPasswordRef.current.value,
+      newPasswordRef.current.value,
+      confirmPasswordRef.current.value
+    );
+    currentPasswordRef.current.value = "";
+    newPasswordRef.current.value = "";
+    confirmPasswordRef.current.value = "";
   };
   return (
     <div className="update-profile-container">

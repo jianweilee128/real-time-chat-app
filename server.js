@@ -91,7 +91,7 @@ io.on("connection", (socket) => {
     });
     const res = await Message.findById(newMessage._id);
     // Return message from server to client and to specific room
-    console.log(res);
+
     return io.to(res.room._id).emit("input-message-receive", res);
   });
 
@@ -100,7 +100,6 @@ io.on("connection", (socket) => {
       name: name,
       users: [userId],
     });
-    console.log(room);
     return io.emit("room-create-success", room);
   });
 

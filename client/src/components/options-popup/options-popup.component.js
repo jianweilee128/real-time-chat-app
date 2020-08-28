@@ -9,21 +9,19 @@ const OptionsPopup = ({ user, socketRef, setToggleOptionsPopup }) => {
   const joinRoomIdRef = useRef();
 
   const handleRoomCreate = () => {
-    let roomName = roomNameRef.current.value;
     socketRef.current.emit("room-create", {
-      name: roomName,
+      name: roomNameRef.current.value,
       userId: user._id,
     });
-    roomName = "";
+    roomNameRef.current.value = "";
   };
 
   const joinRoom = () => {
-    let joinRoomId = joinRoomIdRef.current.value;
     socketRef.current.emit("room-join", {
-      roomId: joinRoomId,
+      roomId: joinRoomIdRef.current.value,
       userId: user._id,
     });
-    joinRoomId = "";
+    joinRoomIdRef.current.value = "";
   };
 
   return (

@@ -1,4 +1,5 @@
 import RoomActionTypes from "./room.types";
+import { checkIfGotDuplicate } from "./room.utils";
 
 const INITIAL_STATE = {
   loadingRoomsSuccess: true,
@@ -33,7 +34,7 @@ const roomReducer = (state = INITIAL_STATE, action) => {
     case RoomActionTypes.ADD_ROOM_LIST:
       return {
         ...state,
-        roomList: state.roomList.concat(action.payload),
+        roomList: checkIfGotDuplicate(action.payload, state.roomList),
       };
     case RoomActionTypes.DELETE_ROOM:
       return {

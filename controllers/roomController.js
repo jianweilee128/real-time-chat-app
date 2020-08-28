@@ -4,6 +4,7 @@ const catchAsync = require("../utils/catchAsync");
 exports.getAllRooms = catchAsync(async (req, res, next) => {
   // Find rooms of that current users
   const rooms = await Room.find({ users: { $in: req.params.id } });
+  if (!rooms) rooms = {};
   res.status(200).json({
     status: "success",
     rooms,

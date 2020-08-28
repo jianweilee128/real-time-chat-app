@@ -3,9 +3,8 @@ const dotenv = require("dotenv");
 
 dotenv.config({ path: "./.env" });
 
-const URI =
-  process.env.MONGODB_URI ||
-  "mongodb+srv://dbAdmin:<admin1234>@clusterchat-hea9n.mongodb.net/test?retryWrites=true&w=majority";
+const URI = process.env.MONGODB_URI || process.env.DATABASE_URI;
+
 const connectDB = async () => {
   try {
     await mongoose
