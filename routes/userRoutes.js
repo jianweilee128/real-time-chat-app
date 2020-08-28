@@ -11,7 +11,6 @@ router.get("/logout", authController.protect, authController.logout);
 
 router.post("/forgotPassword", authController.forgotPassword);
 router.patch("/resetPassword/:token", authController.resetPassword);
-
 router.post(
   "/updatePassword",
   authController.protect,
@@ -19,7 +18,6 @@ router.post(
 );
 
 // User routes
-// router.get("/online", authController.protect, userController.getOnlineUsers);
 router.patch(
   "/updateProfile",
   authController.protect,

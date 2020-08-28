@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Development logging
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "production") {
   app.use(morgan("dev"));
 }
 
@@ -34,23 +34,23 @@ app.use((req, res, next) => {
   next();
 });
 
+// Express API routes
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/messages", messageRouter);
+app.use("/api/v1/rooms", roomRouter);
+
 // Serving static files if in production
 if (process.env.NODE_ENV === "production") {
   // Set the static folder where all css and js file will be read from
   app.use(express.static(path.join(__dirname, "client/build")));
 
   // index.html to be serve for all page routes
-  app.get("*", (req, res) => {
+  app.get("/**", (req, res) => {
     res.sendFile(path.join(__dirname, "client/build", "index.html"));
   });
 }
 
 // Global Middleware
-
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/messages", messageRouter);
-app.use("/api/v1/rooms", roomRouter);
-
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });

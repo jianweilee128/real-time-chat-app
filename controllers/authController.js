@@ -11,7 +11,7 @@ const signToken = (id) => {
   });
 };
 
-const createAndSendToken = (user, statusCode, res) => {
+const createAndSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
 
   const cookieOptions = {
@@ -19,6 +19,7 @@ const createAndSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    domain: "https://real-time-chat-app-mern.herokuapp.com",
   };
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
 
@@ -58,13 +59,18 @@ exports.signin = catchAsync(async (req, res, next) => {
   }
   await User.findByIdAndUpdate(user._id, { online: true });
 
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, req, res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
   // 1) Getting token and check if its there
-  if (req.cookies.jwt) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
   if (!token) {
@@ -85,6 +91,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 
