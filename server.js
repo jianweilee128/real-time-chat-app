@@ -33,22 +33,20 @@ app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
-// Global Middleware
-
-// Serve static files
-app.use(express.static(path.join(__dirname, "../client/public")));
 
 // Serving static files if in production
 if (process.env.NODE_ENV === "production") {
   // Set the static folder where all css and js file will be read from
-  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.use(express.static(path.join(__dirname, "client/build")));
 
   // index.html to be serve for all page routes
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
   });
 }
-console.log(path.resolve(__dirname, "../client/build/index.html"));
+
+// Global Middleware
+
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/rooms", roomRouter);
@@ -60,7 +58,7 @@ app.all("*", (req, res, next) => {
 app.use(ErrorHandler);
 
 // Socket.IO
-const server = require("http").createServer(app);
+const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const Room = require("./models/roomModel");
 const User = require("./models/userModel");

@@ -31,7 +31,7 @@ const ChatView = ({
   userInRoom,
   fetchMessages,
 }) => {
-  const server = "http://localhost:5000/";
+  const serverUrl = "/";
   const messageRef = useRef();
   const socketRef = useRef();
   const endRef = useRef(null);
@@ -45,8 +45,8 @@ const ChatView = ({
   }, [messageList, addMessageList]);
 
   useEffect(() => {
-    socketRef.current = io.connect(server);
-  }, [server]);
+    socketRef.current = io.connect(serverUrl);
+  }, [serverUrl]);
 
   useEffect(() => {
     socketRef.current.on("room-create-success", (res) => {
