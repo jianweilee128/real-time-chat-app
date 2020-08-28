@@ -100,6 +100,7 @@ io.on("connection", (socket) => {
       name: name,
       users: [userId],
     });
+    console.log(room);
     return io.emit("room-create-success", room);
   });
 
