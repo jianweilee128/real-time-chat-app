@@ -58,7 +58,7 @@ app.all("*", (req, res, next) => {
 app.use(ErrorHandler);
 
 // Socket.IO
-const server = require("http").Server(app);
+const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const Room = require("./models/roomModel");
 const User = require("./models/userModel");
