@@ -19,9 +19,12 @@ const createAndSendToken = (user, statusCode, req, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    domain: "https://real-time-chat-app-mern.herokuapp.com",
   };
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+  if (process.env.NODE_ENV === "production") {
+    cookieOptions.secure = true;
+    // Specified the domain of deployment to set cookie properly in heroku
+    cookieOptions.domain = "https://real-time-chat-app-mern.herokuapp.com";
+  }
 
   res.cookie("jwt", token, cookieOptions);
 

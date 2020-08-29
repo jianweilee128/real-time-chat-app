@@ -1,7 +1,7 @@
 {
   "name": "real-time-chat-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Real time chat app built using MERN stack and socket.io",
   "main": "server.js",
   "scripts": {
     "client": "cd client && npm start",

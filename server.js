@@ -24,15 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Development logging
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-
-// Test Middleware
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  next();
-});
 
 // Express API routes
 app.use("/api/v1/users", userRouter);

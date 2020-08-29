@@ -68,6 +68,7 @@ describe("room reducer", () => {
       toggleOptionsPopup: false,
       userInRoom: false,
       err: "",
+      sideMenuOpen: true,
     });
   });
 

@@ -31,7 +31,10 @@ const ChatView = ({
   userInRoom,
   fetchMessages,
 }) => {
-  const serverUrl = "/";
+  let serverUrl = "/";
+  if (process.env.NODE_ENV === "development") {
+    serverUrl = "http://localhost:5000";
+  }
   const messageRef = useRef();
   const socketRef = useRef();
   const endRef = useRef(null);
