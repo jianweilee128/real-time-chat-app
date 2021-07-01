@@ -1,5 +1,3 @@
-![ChatAppRoom](./resources/screenshots/app-preview1.png)
-
 # Real-Time-Chat-App
 
 This project is a chat application that allow users to be able to chat with each other in real time built using MERN stack and socket.io
